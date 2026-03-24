@@ -1,59 +1,51 @@
-# Front
+# 🛠️ Ferretería Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+Este proyecto corresponde al frontend del sistema de ferretería, desarrollado con **Angular 19.2.0**.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Tecnologías y enfoque
 
-```bash
-ng serve
-```
+* ⚙️ **Angular 19.2.0**
+* 🧩 Arquitectura **Standalone Components** (sin módulos)
+* 💉 Uso de inyección de dependencias moderna con `inject()`
+* 🎯 Estructura basada en features (enfoque escalable)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## ▶️ Ejecución del proyecto
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Instalar dependencias:
 
 ```bash
-ng generate --help
+npm install
 ```
 
-## Building
-
-To build the project run:
+Levantar el proyecto:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 🌐 Acceso
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Una vez iniciado, la aplicación estará disponible en:
 
 ```bash
-ng test
+http://localhost:4200
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 📌 Notas
 
-```bash
-ng e2e
-```
+* El proyecto no utiliza `NgModules`, está construido completamente con componentes standalone.
+* Se utilizan prácticas modernas de Angular para mantener un código limpio y escalable.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📅 Estado
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Proyecto en desarrollo 🚧
