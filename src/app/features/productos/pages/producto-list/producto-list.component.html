@@ -1,0 +1,87 @@
+<div class="container">
+    <span class="fw-bold">Productos - Componente hijo 2</span>
+    <div class="row mt-3">
+        <div class="col-8">
+            <h5>Lista de productos</h5>
+
+            @if (loading) {
+            <div class="alert alert-info">{{loadingMessage}}</div>
+            } @else {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Categoría</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (p of productos; track p.id) {
+                    <tr>
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.descripcion }}</td>
+                        <td>{{ p.precio | currency:'CLP' }}</td>
+                        <td>{{ p.stock_actual }}</td>
+                        <td>{{ p.categoria.nombre }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            }
+        </div>
+        <div class="col-4">
+            <h5>Crear producto</h5>
+            <form [formGroup]="form">
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" formControlName="nombre">
+                    @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                    <div class="text-danger">El nombre es requerido</div>
+                    }
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <input type="text" class="form-control" formControlName="descripcion">
+                    @if (form.get('descripcion')?.invalid && form.get('descripcion')?.touched) {
+                    <div class="text-danger">La descripción es requerida</div>
+                    }
+                </div>
+                <div class="mb-3">
+                    <label for="precio" class="form-label">Precio</label>
+                    <input type="number" class="form-control" formControlName="precio">
+                    @if (form.get('precio')?.invalid && form.get('precio')?.touched) {
+                    <div class="text-danger">El precio es requerido</div>
+                    }
+                </div>
+                <div class="mb-3">
+                    <label for="stock_actual" class="form-label">Stock</label>
+                    <input type="number" class="form-control" formControlName="stock_actual">
+                    @if (form.get('stock_actual')?.invalid && form.get('stock_actual')?.touched) {
+                    <div class="text-danger">El stock es requerido</div>
+                    }
+                </div>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">Categoría</label>
+                    <select class="form-select" formControlName="categoria">
+                        <option value="" selected>Seleccione una categoría</option>
+                        @for (c of categorias; track c.id) {
+                        <option [value]="c.id">{{ c.nombre }}</option>
+                        }
+                    </select>
+                    @if (form.get('categoria')?.invalid && form.get('categoria')?.touched) {
+                    <div class="text-danger">La categoría es requerida</div>
+                    }
+                </div>
+
+                <button type="button" class="btn btn-primary" [disabled]="form.invalid"
+                    (click)="guardarProducto()">Guardar</button>
+            </form>
+
+            @if (mensaje) {
+            <div class="alert alert-info mt-3">{{ mensaje }}</div>
+            }
+        </div>
+    </div>
+</div>
