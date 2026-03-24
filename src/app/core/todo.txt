@@ -1,0 +1,4 @@
+aqui irán cosas globales
+### interceptores
+### configuraciones globales
+### etc
