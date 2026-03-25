@@ -12,8 +12,12 @@ import { RouterLink } from '@angular/router';
 export class DashboardComponent {
   menu = [
     {
-      label: 'Cotizaciones',
+      label: 'Inicio',
       route: '',
+      dropdown: false,
+    },
+    {
+      label: 'Cotizaciones',
       dropdown: true,
       child: [
         { label: 'Cotizaciones', route: '/cotizaciones' },

@@ -3,11 +3,12 @@ import { CATEGORIA_ROUTES } from './features/categorias/categoria.routes';
 import { PRODUCTO_ROUTES } from './features/productos/producto.routes';
 import { MANTENEDORES_ROUTES } from './features/mantenedores/mantenedores.routes';
 import { COTIZACIONES_ROUTES } from './features/cotizaciones/cotizaciones.routes';
+import { HOME_ROUTES } from './features/home/home.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    children: [],
+    children: HOME_ROUTES,
   },
   {
     path: 'cotizaciones',
