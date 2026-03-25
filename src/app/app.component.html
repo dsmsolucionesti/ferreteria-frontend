@@ -1,11 +1,10 @@
-<main class="layout" style="background-color: lightgray;">
+<div class="flex h-screen">
+    <div class="w-18rem p-3 bg-gray-900 text-white">
+        <app-dashboard></app-dashboard>
+    </div>
 
-    <!-- Sidebar fijo -->
-    <app-dashboard></app-dashboard>
-
-    <!-- Contenido dinámico -->
-    <div class="content" style="border-radius: 15px; margin: 20px;">
+    <div class="flex-1 p-4 bg-gray-100">
         <router-outlet></router-outlet>
     </div>
 
-</main>
+</div>

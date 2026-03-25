@@ -1,3 +1,26 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #f5f7fa;
+  color: #1f2937;
+}
+
+:root {
+  --p-primary-color: #6366f1;
+  --p-primary-hover-color: #4f46e5;
+  --p-border-radius: 10px;
+}
+
+.p-card {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+.p-button {
+  border-radius: 8px !important;
+  font-weight: 500;
+}
+
 .sidebar {
   background: #212529;
   color: white;
@@ -26,3 +49,4 @@
   --p-content-color: #ffffff;
   --p-surface-0: #212529;
 }
+
