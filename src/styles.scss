@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+.sidebar {
+  background: #212529;
+  color: white;
+  height: 100vh;
+  padding: 1rem;
+
+  --p-text-color: #ffffff;
+  --p-menuitem-text-color: #ffffff;
+  --p-content-color: #ffffff;
+  --p-surface-0: #212529;
+  --p-menuitem-hover-background: #343a40;
+}
+
+.sidebar,
+.sidebar .p-component {
+  --p-text-color: #ffffff;
+  --p-menuitem-text-color: #ffffff;
+  --p-content-color: #ffffff;
+  --p-surface-0: #212529;
+  --p-menuitem-hover-background: #343a40;
+}
+
+.sidebar .p-panelmenu {
+  --p-text-color: #ffffff;
+  --p-menuitem-text-color: #ffffff;
+  --p-content-color: #ffffff;
+  --p-surface-0: #212529;
+}
