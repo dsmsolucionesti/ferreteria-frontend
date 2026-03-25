@@ -15,4 +15,11 @@ export const MANTENEDORES_ROUTES: Routes = [
         (m) => m.ClientesComponent,
       ),
   },
+  {
+    path: 'usuarios',
+    loadComponent: () =>
+      import('./components/usuarios/pages/usuarios.component').then(
+        (m) => m.UsuariosComponent,
+      ),
+  },
 ];

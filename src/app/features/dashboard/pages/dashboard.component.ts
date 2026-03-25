@@ -28,8 +28,8 @@ export class DashboardComponent {
       route: '/mantenedores',
       dropdown: true,
       child: [
-        { label: 'Clientes', route: '/clientes' },
-        { label: 'Usuarios', route: '/usuarios' },
+        { label: 'Clientes', route: '/mantenedores/clientes' },
+        { label: 'Usuarios', route: '/mantenedores/usuarios' },
         { label: 'Ver todos', route: '/mantenedores' },
       ],
     },
