@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { CATEGORIA_ROUTES } from './features/categorias/categoria.routes';
-import { PRODUCTO_ROUTES } from './features/productos/producto.routes';
+import { CATEGORIA_ROUTES } from './features/cotizaciones/components/categorias/categoria.routes';
+import { PRODUCTO_ROUTES } from './features/cotizaciones/components/productos/producto.routes';
 import { MANTENEDORES_ROUTES } from './features/mantenedores/mantenedores.routes';
 import { COTIZACIONES_ROUTES } from './features/cotizaciones/cotizaciones.routes';
 import { HOME_ROUTES } from './features/home/home.routes';
