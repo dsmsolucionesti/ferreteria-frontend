@@ -3,12 +3,15 @@ import { Categoria } from '../../models/categoria.model';
 import { CommonModule } from '@angular/common';
 import { CategoriaService } from '../../services/categoria.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { SpinnerComponent } from '../../../../../../shared/components/spinner/pages/spinner.component';
+import { TableModule } from 'primeng/table';
+import { Button } from "primeng/button";
 
 @Component({
   selector: 'app-categoria-list',
   templateUrl: './categoria-list.component.html',
   styleUrls: ['./categoria-list.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, TableModule, Button],
   standalone: true,
 })
 export class CategoriaListComponent implements OnInit {
@@ -22,7 +25,7 @@ export class CategoriaListComponent implements OnInit {
   });
 
   mensaje: string = '';
-  loading: boolean = false;
+  loading: boolean = true;
   loadingMessage: string = '';
 
   ngOnInit(): void {
