@@ -1,5 +1,4 @@
-<div class="container">
-    <span class="fw-bold">Categorías - Componente hijo 1</span>
+<div class="container-fluid">
     <div class="row mt-3">
         <div class="col-6">
             <h5>Lista de categorías</h5>
@@ -24,10 +23,11 @@
                 </tbody>
             </table>
             }
+
         </div>
         <div class="col-6">
             <h5>Crear categoría</h5>
-            <form [formGroup]="form">
+            <form [formGroup]="form" (ngSubmit)="guardarCategoria()">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre</label>
                     <input type="text" class="form-control" formControlName="nombre">
@@ -43,8 +43,7 @@
                     }
                 </div>
 
-                <button type="button" class="btn btn-primary" [disabled]="form.invalid"
-                    (click)="guardarCategoria()">Guardar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Guardar</button>
             </form>
 
             @if (mensaje) {

@@ -1,1 +1,11 @@
-<router-outlet />
+<main class="layout" style="background-color: lightgray;">
+
+    <!-- Sidebar fijo -->
+    <app-dashboard></app-dashboard>
+
+    <!-- Contenido dinámico -->
+    <div class="content" style="border-radius: 15px; margin: 20px;">
+        <router-outlet></router-outlet>
+    </div>
+
+</main>

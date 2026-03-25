@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { CATEGORIA_ROUTES } from './features/categorias/categoria.routes';
-import { DashboardComponent } from './features/dashboard/pages/dashboard.component';
 import { PRODUCTO_ROUTES } from './features/productos/producto.routes';
+import { MANTENEDORES_ROUTES } from './features/mantenedores/mantenedores.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    children: CATEGORIA_ROUTES,
   },
   {
     path: 'categorias',
@@ -16,4 +16,9 @@ export const routes: Routes = [
     path: 'productos',
     children: PRODUCTO_ROUTES,
   },
+  {
+    path: 'mantenedores',
+    children: MANTENEDORES_ROUTES,
+  },
+  { path: '**', redirectTo: 'categorias' },
 ];
