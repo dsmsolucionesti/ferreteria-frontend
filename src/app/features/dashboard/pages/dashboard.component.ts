@@ -10,12 +10,28 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-   menu = [
-    { label: 'Cotizaciones', icon: 'speedometer2', route: '/cotizaciones' },
-    { label: 'Nota de venta', icon: 'table', route: '/nota-venta' },
-    { label: 'Pagos', icon: 'grid', route: '/pagos' },
-    { label: 'Productos', icon: 'grid', route: '/productos' },
-    { label: 'Categorías', icon: 'grid', route: '/categorias' },
-    { label: 'Mantenedores', icon: 'people-circle', route: '/mantenedores' }
+  menu = [
+    {
+      label: 'Cotizaciones',
+      route: '',
+      dropdown: true,
+      child: [
+        { label: 'Cotizaciones', route: '/cotizaciones' },
+        { label: 'Productos', route: '/productos' },
+        { label: 'Categorías', route: '/categorias' },
+      ],
+    },
+    { label: 'Nota de venta', route: '/nota-venta', dropdown: false },
+    { label: 'Pagos', route: '/pagos', dropdown: false },
+    {
+      label: 'Mantenedores',
+      route: '/mantenedores',
+      dropdown: true,
+      child: [
+        { label: 'Clientes', route: '/clientes' },
+        { label: 'Usuarios', route: '/usuarios' },
+        { label: 'Ver todos', route: '/mantenedores' },
+      ],
+    },
   ];
 }
