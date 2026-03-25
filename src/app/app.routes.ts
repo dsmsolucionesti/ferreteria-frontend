@@ -4,27 +4,34 @@ import { PRODUCTO_ROUTES } from './features/cotizaciones/components/productos/pr
 import { MANTENEDORES_ROUTES } from './features/mantenedores/mantenedores.routes';
 import { COTIZACIONES_ROUTES } from './features/cotizaciones/cotizaciones.routes';
 import { HOME_ROUTES } from './features/home/home.routes';
+import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
   {
     path: '',
-    children: HOME_ROUTES,
+    component: LayoutComponent,
+    children: [
+      {
+        path: '',
+        children: HOME_ROUTES,
+      },
+      {
+        path: 'cotizaciones',
+        children: COTIZACIONES_ROUTES,
+      },
+      {
+        path: 'categorias',
+        children: CATEGORIA_ROUTES,
+      },
+      {
+        path: 'productos',
+        children: PRODUCTO_ROUTES,
+      },
+      {
+        path: 'mantenedores',
+        children: MANTENEDORES_ROUTES,
+      },
+      { path: '**', redirectTo: '' },
+    ],
   },
-  {
-    path: 'cotizaciones',
-    children: COTIZACIONES_ROUTES,
-  },
-  {
-    path: 'categorias',
-    children: CATEGORIA_ROUTES,
-  },
-  {
-    path: 'productos',
-    children: PRODUCTO_ROUTES,
-  },
-  {
-    path: 'mantenedores',
-    children: MANTENEDORES_ROUTES,
-  },
-  { path: '**', redirectTo: '' },
 ];
