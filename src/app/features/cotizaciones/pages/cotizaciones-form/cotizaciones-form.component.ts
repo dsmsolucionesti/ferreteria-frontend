@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -11,14 +11,12 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
-import { InputNumber } from 'primeng/inputnumber';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SpinnerComponent } from '../../../../shared/components/spinner/pages/spinner.component';
 import { ClienteService } from '../../../mantenedores/components/clientes/services/cliente.service';
 import { Cliente } from '../../../mantenedores/components/clientes/models/clientes.model';
 import { CotizacionesService } from '../../services/cotizaciones.service';
-import { Cotizaciones } from '../../models/cotizaciones.model';
 import { ProductoService } from '../../components/productos/services/producto.service';
 import { Producto } from '../../components/productos/models/producto.model';
 import { DetalleCotizacion } from '../../models/detalle-cotizacion.model';
@@ -39,7 +37,6 @@ import { DetalleCotizacion } from '../../models/detalle-cotizacion.model';
     TextareaModule,
     ToastModule,
     TooltipModule,
-    InputNumber,
     SelectModule,
   ],
   providers: [ConfirmationService, MessageService],

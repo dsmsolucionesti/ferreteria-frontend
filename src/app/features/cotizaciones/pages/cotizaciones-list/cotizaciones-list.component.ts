@@ -6,7 +6,6 @@ import { Button } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
@@ -19,8 +18,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SpinnerComponent } from '../../../../shared/components/spinner/pages/spinner.component';
 import { CotizacionesService } from '../../services/cotizaciones.service';
 import { Cotizaciones } from '../../models/cotizaciones.model';
-import { EstadoCotizacion } from '../../cotizaciones.enum';
-import { CotizacionesFormComponent } from "../cotizaciones-form/cotizaciones-form.component";
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -33,7 +30,6 @@ import { RouterLink } from "@angular/router";
     CommonModule,
     ConfirmDialogModule,
     DialogModule,
-    InputNumber,
     InputTextModule,
     ReactiveFormsModule,
     SelectModule,
@@ -43,7 +39,6 @@ import { RouterLink } from "@angular/router";
     TextareaModule,
     ToastModule,
     TooltipModule,
-    CotizacionesFormComponent,
     RouterLink
 ],
   providers: [MessageService, ConfirmationService],
