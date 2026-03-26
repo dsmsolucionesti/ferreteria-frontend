@@ -1,16 +1,29 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Producto } from '../../models/producto.model';
 import { CommonModule } from '@angular/common';
-import { ProductoService } from '../../services/producto.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+
+import { Button } from 'primeng/button';
 import { Categoria } from '../../../categorias/models/categoria.model';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+
 import { CategoriaService } from '../../../categorias/services/categoria.service';
+import { Producto } from '../../models/producto.model';
+import { ProductoService } from '../../services/producto.service';
+import { SpinnerComponent } from '../../../../../../shared/components/spinner/pages/spinner.component';
 
 @Component({
   selector: 'app-producto-list',
   templateUrl: './producto-list.component.html',
   styleUrls: ['./producto-list.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SpinnerComponent,
+    TableModule,
+    TooltipModule,
+    Button,
+  ],
   standalone: true,
 })
 export class ProductoListComponent implements OnInit {
@@ -41,6 +54,7 @@ export class ProductoListComponent implements OnInit {
     this.loading = true;
     this.loadingMessage = 'Cargando productos';
     this.productoService.getAll().subscribe((res) => {
+      console.log({ res });
       if (res.idEstado === 0) {
         this.productos = res.datos || [];
         this.loading = false;
@@ -56,7 +70,7 @@ export class ProductoListComponent implements OnInit {
   }
 
   cargarCategorias() {
-    this.categoriaService.getAll().subscribe((res) => {
+    this.categoriaService.findAll().subscribe((res) => {
       if (res.idEstado === 0) {
         this.categorias = res.datos || [];
       }
@@ -88,5 +102,13 @@ export class ProductoListComponent implements OnInit {
         this.mensaje = 'Error al crear el producto';
       }
     });
+  }
+
+  editar(id: number) {
+    console.log('Editar producto', id);
+  }
+
+  eliminar(id: number) {
+    console.log('Eliminar producto', id);
   }
 }

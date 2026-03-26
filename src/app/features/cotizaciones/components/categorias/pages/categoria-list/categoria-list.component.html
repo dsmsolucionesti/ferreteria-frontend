@@ -1,9 +1,13 @@
 <div class="container-fluid">
-    <h4>Categorías</h4>
+    <div class="row">
+        <div class="col-12">
+            <h3>Listado de categorías</h3>
+        </div>
+    </div>
     @if (loading) {
     <app-spinner></app-spinner>
     } @else {
-    <div class="row mt-3">
+    <div class="row">
         <div class="col-12">
 
             @if (loading) {
@@ -23,42 +27,20 @@
                         <td>{{ c.nombre }}</td>
                         <td>{{ c.descripcion }}</td>
                         <td>
-                            <div class="d-flex gap-2">
-                                <p-button label="Editar"></p-button>
-                                <p-button label="Eliminar"></p-button>
+                            <div class="flex gap-4 justify-content-center">
+                                <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
+                                    (click)="editar($event, c.id)"></i>
+                                <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
+                                    (click)="eliminar($event, c.id)"></i>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
             }
-
         </div>
-        <!-- <div class="col-6">
-            <h5>Crear categoría</h5>
-            <form [formGroup]="form" (ngSubmit)="guardarCategoria()">
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" formControlName="nombre">
-                    @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
-                    <div class="text-danger">El nombre es requerido</div>
-                    }
-                </div>
-                <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripción</label>
-                    <input type="text" class="form-control" formControlName="descripcion">
-                    @if (form.get('descripcion')?.invalid && form.get('descripcion')?.touched) {
-                    <div class="text-danger">La descripción es requerida</div>
-                    }
-                </div>
-
-                <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Guardar</button>
-            </form>
-
-            @if (mensaje) {
-            <div class="alert alert-info mt-3">{{ mensaje }}</div>
-            }
-        </div> -->
     </div>
     }
 </div>
+<p-toast />
+<p-confirmdialog />

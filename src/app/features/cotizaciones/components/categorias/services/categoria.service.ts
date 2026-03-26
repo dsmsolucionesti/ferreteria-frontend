@@ -10,14 +10,36 @@ export class CategoriaService {
 
   private http = inject(HttpClient);
 
-  getAll(): Observable<RespuestaProceso<Categoria>> {
+  findAll(): Observable<RespuestaProceso<Categoria>> {
     return this.http.get<RespuestaProceso<Categoria>>(`${this.url}/categorias`);
   }
 
-  create(data: Partial<Categoria>): Observable<RespuestaProceso<Categoria>> {
+  findById(id: number): Observable<RespuestaProceso<Categoria>> {
+    return this.http.get<RespuestaProceso<Categoria>>(
+      `${this.url}/categorias/${id}`,
+    );
+  }
+
+  post(data: Partial<Categoria>): Observable<RespuestaProceso<Categoria>> {
     return this.http.post<RespuestaProceso<Categoria>>(
       `${this.url}/categorias`,
       data,
+    );
+  }
+
+  patch(
+    id: number,
+    data: Partial<Categoria>,
+  ): Observable<RespuestaProceso<Categoria>> {
+    return this.http.patch<RespuestaProceso<Categoria>>(
+      `${this.url}/categorias/${id}`,
+      data,
+    );
+  }
+
+  delete(id: number): Observable<RespuestaProceso<Categoria>> {
+    return this.http.delete<RespuestaProceso<Categoria>>(
+      `${this.url}/categorias/${id}`,
     );
   }
 }
