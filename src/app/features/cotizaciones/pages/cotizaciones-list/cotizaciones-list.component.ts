@@ -87,6 +87,10 @@ export class CotizacionesListComponent implements OnInit {
           this.cotizaciones = res.datos || [];
           this.loading = false;
         }
+
+        if (res.idEstado === 1) {
+          this.loading = false;
+        }
       },
       error: (err) => {
         console.error('Error al cargar cotizaciones:', err);
