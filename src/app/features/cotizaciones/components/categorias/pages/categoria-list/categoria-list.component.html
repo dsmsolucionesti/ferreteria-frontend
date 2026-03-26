@@ -1,15 +1,13 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h3>Listado de categorías</h3>
-        </div>
+<div class="p-4">
+    <div class="col-12">
+        <h3>Listado de categorías</h3>
     </div>
     @if (loading) {
     <app-spinner></app-spinner>
     } @else {
     <div class="row">
         <div class="col-12">
-            <div class="flex justify-content-end mb-2">
+            <div class="flex justify-content-end mb-3">
                 <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
             </div>
 
@@ -27,7 +25,7 @@
                         <td>{{ c.nombre }}</td>
                         <td>{{ c.descripcion }}</td>
                         <td>
-                            <div class="flex gap-4 justify-content-center">
+                            <div class="flex justify-content-center gap-3">
                                 <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
                                     (click)="showFormulario(c.id)"></i>
                                 <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"

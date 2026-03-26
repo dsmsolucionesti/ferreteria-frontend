@@ -10,14 +10,39 @@ export class CotizacionesService {
 
   private http = inject(HttpClient);
 
-  getAll(): Observable<RespuestaProceso<Cotizaciones>> {
-    return this.http.get<RespuestaProceso<Cotizaciones>>(`${this.url}/cotizaciones`);
+  findAll(): Observable<RespuestaProceso<Cotizaciones>> {
+    return this.http.get<RespuestaProceso<Cotizaciones>>(
+      `${this.url}/cotizaciones`,
+    );
   }
 
-  create(data: Partial<Cotizaciones>): Observable<RespuestaProceso<Cotizaciones>> {
+  findById(id: number): Observable<RespuestaProceso<Cotizaciones>> {
+    return this.http.get<RespuestaProceso<Cotizaciones>>(
+      `${this.url}/cotizaciones/${id}`,
+    );
+  }
+
+  post(data: any): Observable<RespuestaProceso<Cotizaciones>> {
+    console.log(data);
     return this.http.post<RespuestaProceso<Cotizaciones>>(
       `${this.url}/cotizaciones`,
       data,
+    );
+  }
+
+  patch(
+    id: number,
+    data: Partial<Cotizaciones>,
+  ): Observable<RespuestaProceso<Cotizaciones>> {
+    return this.http.patch<RespuestaProceso<Cotizaciones>>(
+      `${this.url}/cotizaciones/${id}`,
+      data,
+    );
+  }
+
+  delete(id: number): Observable<RespuestaProceso<Cotizaciones>> {
+    return this.http.delete<RespuestaProceso<Cotizaciones>>(
+      `${this.url}/cotizaciones/${id}`,
     );
   }
 }

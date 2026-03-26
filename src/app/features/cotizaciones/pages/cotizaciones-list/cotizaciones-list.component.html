@@ -1,3 +1,39 @@
-<div class="container-fluid">
-    <h4>Cotizaciones</h4>
+<div class="p-4">
+    <div class="col-12">
+        <h3>Cotizaciones</h3>
+    </div>
+    @if(loading) {
+    <app-spinner></app-spinner>
+    } @else {
+    <p-table [value]="cotizaciones" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Usuario creador</th>
+                <th>Monto total</th>
+                <th>Fecha creación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-c>
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.cliente?.nombre }}</td>
+                <td>{{ c.usuario?.nombre }}</td>
+                <td>{{ c.total }}</td>
+                <td>{{ c.fecha | date:'dd/MM/yyyy' }}</td>
+                <td><p-tag [value]="c.estadoCotizacion?.nombre" [severity]="getSeverity(c.estadoCotizacion?.nombre)"></p-tag></td>
+                <td>
+                    <div class="flex justify-content-center gap-3">
+                        <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"></i>
+                        <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"></i>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    }
 </div>
