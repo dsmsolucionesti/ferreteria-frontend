@@ -6,10 +6,14 @@
         <h3>Nueva cotización</h3>
     </div>
 
+    <div class="flex justify-content-end mb-3">
+        <p-button label="Volver" routerLink="/cotizaciones" />
+    </div>
+
     @if(loading) {
     <app-spinner></app-spinner>
     } @else {
-    <div class="card p-4" style="background-color: #fff; border-radius: 15px;">
+    <div class="card p-4 float-container">
         <form [formGroup]="form" (ngSubmit)="siguiente()" class="flex flex-column gap-4">
             <div class="formgrid grid">
                 <div class="field col-12 md:col-6">
@@ -36,12 +40,12 @@
 </div>
 }
 
-@if (habilitarDetalle) {
+@if (!loading && habilitarDetalle) {
 <div class="p-4">
     <div class="col-12">
         <h3>Detalle de la cotización</h3>
     </div>
-    <div class="card p-4" style="background-color: #fff; border-radius: 15px;">
+    <div class="card p-4 float-container">
         <form [formGroup]="formDetalle" class="flex flex-column gap-4">
             <div class="formgrid grid">
                 <div class="field col-12 md:col-3">
@@ -52,16 +56,22 @@
                 @if(selectProducto) {
                 <div class="field col-12 md:col-3">
                     <label for="productos">Cantidad</label>
-                    <input id="cantidad" pInputText formControlName="cantidad" class="w-full"
-                        (input)="onCantidadChange($event)" />
+                    <p-inputnumber id="cantidad" pInputNumber formControlName="cantidad" class="w-full"
+                        (onInput)="onCantidadChange($event)" />
+                    @if (formDetalle.get('cantidad')?.invalid && formDetalle.get('cantidad')?.touched) {
+                    <small class="text-red-500">
+                        La cantidad no puede ser menor a 1
+                    </small>
+                    }
                 </div>
                 <div class="field col-12 md:col-3">
                     <label for="valorUnitario">Valor unitario</label>
-                    <input id="valorUnitario" pInputText formControlName="valorUnitario" class="w-full" />
+                    <p-inputnumber id="valorUnitario" pInputNumber formControlName="valorUnitario" class="w-full" />
+
                 </div>
                 <div class="field col-12 md:col-3">
                     <label for="subtotal">Subtotal</label>
-                    <input id="subtotal" pInputText formControlName="subtotal" class="w-full" />
+                    <p-inputnumber id="subtotal" pInputNumber formControlName="subtotal" class="w-full" />
                 </div>
                 <div class="field col-12 md:col-3">
                     <p-button label="Agregar" icon="pi pi-plus" type="button" (onClick)="agregarProductos()" />
@@ -86,14 +96,14 @@
                 <tr>
                     <td>{{ c.idProducto.nombre }}</td>
                     <td>{{ c.cantidad }}</td>
-                    <td>{{ c.precioUnitario }}</td>
-                    <td>{{ c.subtotal }}</td>
+                    <td>{{ c.precioUnitario | clp }}</td>
+                    <td>{{ c.subtotal | clp }}</td>
                 </tr>
             </ng-template>
         </p-table>
 
         <div class="field col-12 md:col-3">
-            <p-button label="Agregar" icon="pi pi-plus" type="button" (onClick)="enviarCotizacion()" />
+            <p-button label="Crear cotización" icon="pi pi-pencil" type="button" (onClick)="enviarCotizacion()" />
         </div>
         }
     </div>
@@ -101,3 +111,6 @@
 
 </div>
 }
+
+<p-toast />
+<p-confirmdialog />

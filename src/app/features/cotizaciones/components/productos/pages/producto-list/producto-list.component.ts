@@ -20,6 +20,7 @@ import { Producto } from '../../models/producto.model';
 import { ProductoService } from '../../services/producto.service';
 import { SpinnerComponent } from '../../../../../../shared/components/spinner/pages/spinner.component';
 import { InputNumber } from 'primeng/inputnumber';
+import { ClpPipe } from "../../../../../../shared/pipes/moneda.pipe";
 
 @Component({
   selector: 'app-producto-list',
@@ -40,7 +41,8 @@ import { InputNumber } from 'primeng/inputnumber';
     TooltipModule,
     InputNumber,
     SelectModule,
-  ],
+    ClpPipe
+],
   providers: [ConfirmationService, MessageService],
   standalone: true,
 })

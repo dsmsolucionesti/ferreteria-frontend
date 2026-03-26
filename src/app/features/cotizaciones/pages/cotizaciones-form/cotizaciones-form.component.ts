@@ -20,6 +20,9 @@ import { CotizacionesService } from '../../services/cotizaciones.service';
 import { ProductoService } from '../../components/productos/services/producto.service';
 import { Producto } from '../../components/productos/models/producto.model';
 import { DetalleCotizacion } from '../../models/detalle-cotizacion.model';
+import { ClpPipe } from '../../../../shared/pipes/moneda.pipe';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cotizaciones-form',
@@ -38,8 +41,11 @@ import { DetalleCotizacion } from '../../models/detalle-cotizacion.model';
     ToastModule,
     TooltipModule,
     SelectModule,
+    ClpPipe,
+    InputNumberModule,
+    RouterLink,
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService, MessageService, ClpPipe],
   standalone: true,
 })
 export class CotizacionesFormComponent implements OnInit {
@@ -49,6 +55,7 @@ export class CotizacionesFormComponent implements OnInit {
   private clienteService = inject(ClienteService);
   private productoService = inject(ProductoService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
 
   clientes: Cliente[] = [];
   productos: Producto[] = [];
@@ -66,7 +73,7 @@ export class CotizacionesFormComponent implements OnInit {
 
   formDetalle = this.fb.group({
     productos: [[], Validators.required],
-    cantidad: [0, Validators.required],
+    cantidad: [null, [Validators.required, Validators.min(1)]],
     valorUnitario: [{ value: 0, disabled: true }, Validators.required],
     subtotal: [{ value: 0, disabled: true }, Validators.required],
   });
@@ -91,64 +98,25 @@ export class CotizacionesFormComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
+
     this.productoService.findAll().subscribe({
       next: (res) => {
         this.productos = res.datos || [];
+        this.loading = false;
         this.habilitarDetalle = true;
       },
       error: (error) => {
         console.log(error);
+        this.loading = false;
       },
     });
-
-    /*  const payload = {
-      id_cliente: this.form.value.clientes,
-      id_usuario: this.form.value.usuario,
-    };
-
-    this.cotizacionService
-      .post(payload as Partial<Cotizaciones>)
-      .subscribe({
-        next: (res) => {
-          if (res.idEstado === 0) {
-            this.form.reset();
-            this.shorFormulario = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Confirmado',
-              detail: 'Cotización guardada',
-            });
-            this.habilitarDetalle = true;
-
-          } else {
-            this.loading = false;
-            this.shorFormulario = false;
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Error al crear el registro',
-            });
-          }
-        },
-        error: (err: any) => {
-          this.loading = false;
-          this.shorFormulario = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al crear el registro',
-          });
-        },
-        complete: () => {
-          this.loading = false;
-        },
-      }); */
   }
 
   onProductoChange(event: any) {
     this.formDetalle.patchValue({
       productos: null,
-      cantidad: 0,
+      cantidad: null,
       valorUnitario: 0,
       subtotal: 0,
     });
@@ -165,10 +133,9 @@ export class CotizacionesFormComponent implements OnInit {
     this.selectProducto = true;
   }
 
-  onCantidadChange(event: Event) {
-    const cantidad = Number((event?.target as HTMLInputElement)?.value) || 0;
-    const precio = this.formDetalle.get('valorUnitario')?.value || 0;
-
+  onCantidadChange(event: any) {
+    const cantidad = event.value;
+    const precio = Number(this.formDetalle.get('valorUnitario')?.value) || 0;
     const subtotal = cantidad * precio;
 
     this.formDetalle.patchValue({
@@ -177,40 +144,118 @@ export class CotizacionesFormComponent implements OnInit {
   }
 
   agregarProductos() {
+    if (this.formDetalle.invalid) {
+      this.formDetalle.markAllAsTouched();
+      return;
+    }
+
     const productoId = Number(this.formDetalle.get('productos')?.value);
     const producto = this.productos.find((p) => p.id === productoId);
     const nombre = producto?.nombre;
 
-    const detalle: DetalleCotizacion = {
-      idCotizacion: 0,
-      idProducto: {
-        id: productoId,
-        nombre: nombre || '',
-      } as Producto,
-      cantidad: Number(this.formDetalle.get('cantidad')?.value) || 0,
-      precioUnitario: Number(this.formDetalle.get('valorUnitario')?.value) || 0,
-      subtotal: Number(this.formDetalle.get('subtotal')?.value) || 0,
-    };
+    const cantidad = Number(this.formDetalle.get('cantidad')?.value) || 0;
+    const precio = Number(this.formDetalle.get('valorUnitario')?.value) || 0;
 
-    this.cotizacionDetalle.push(detalle);
+    const index = this.cotizacionDetalle.findIndex(
+      (d) => d.idProducto.id === productoId,
+    );
+
+    if (index !== -1) {
+      this.cotizacionDetalle[index].cantidad += cantidad;
+
+      this.cotizacionDetalle[index].subtotal =
+        this.cotizacionDetalle[index].cantidad *
+        this.cotizacionDetalle[index].precioUnitario;
+    } else {
+      const detalle: DetalleCotizacion = {
+        idCotizacion: 0,
+        idProducto: {
+          id: productoId,
+          nombre: nombre || '',
+        } as Producto,
+        cantidad: cantidad,
+        precioUnitario: precio,
+        subtotal: cantidad * precio,
+      };
+
+      this.cotizacionDetalle.push(detalle);
+    }
     this.selectProducto = false;
-    this.formDetalle.reset();
+    this.formDetalle.reset({
+      productos: null,
+      cantidad: null,
+      valorUnitario: 0,
+      subtotal: 0,
+    });
+
     this.showTableProductos = true;
   }
 
   enviarCotizacion() {
-    const payloadCotizacion = {
-      idCliente: this.form.get('clientes')?.value,
-      isUsuario: this.form.get('usuario')?.value,
-      cotizacionDetalle: this.cotizacionDetalle,
-    };
-
-    this.cotizacionService.post(payloadCotizacion).subscribe({
-      next: (response) => {
-        console.log(response);
+    this.confirmationService.confirm({
+      message: '¿Desea generar la cotización?',
+      header: 'Atención',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
       },
-      error: (err) => {
-        console.log(err);
+      acceptButtonProps: {
+        label: 'Enviar',
+        severity: 'success',
+      },
+
+      accept: () => {
+        this.loading = true;
+        const payloadCotizacion = {
+          idCliente: this.form.get('clientes')?.value,
+          isUsuario: this.form.get('usuario')?.value,
+          cotizacionDetalle: this.cotizacionDetalle,
+        };
+
+        this.cotizacionService.post(payloadCotizacion).subscribe({
+          next: (res) => {
+            if (res.idEstado === 0) {
+              this.router.navigate(['/cotizaciones'], {
+                state: {
+                  mensaje: {
+                    severity: 'success',
+                    summary: 'Confirmado',
+                    detail: 'Cotización generada correctamente',
+                  },
+                },
+              });
+            } else {
+              this.loading = false;
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al generar la cotización',
+              });
+            }
+          },
+          error: (err) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error al generar la cotización',
+            });
+          },
+          complete: () => {
+            this.loading = false;
+          },
+        });
+      },
+      reject: () => {
+        this.loading = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Cancelado',
+          detail: 'Operación cancelada',
+        });
       },
     });
   }

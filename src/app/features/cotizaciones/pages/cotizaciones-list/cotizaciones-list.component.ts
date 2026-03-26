@@ -18,7 +18,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SpinnerComponent } from '../../../../shared/components/spinner/pages/spinner.component';
 import { CotizacionesService } from '../../services/cotizaciones.service';
 import { Cotizaciones } from '../../models/cotizaciones.model';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from '@angular/router';
+import { ClpPipe } from '../../../../shared/pipes/moneda.pipe';
 
 @Component({
   selector: 'app-cotizaciones-list',
@@ -39,8 +40,9 @@ import { RouterLink } from "@angular/router";
     TextareaModule,
     ToastModule,
     TooltipModule,
-    RouterLink
-],
+    RouterLink,
+    ClpPipe,
+  ],
   providers: [MessageService, ConfirmationService],
   standalone: true,
 })
@@ -49,6 +51,7 @@ export class CotizacionesListComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
+  private router = inject(Router);
 
   cotizaciones: Cotizaciones[] = [];
   form = this.fb.group({
@@ -64,17 +67,30 @@ export class CotizacionesListComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarCotizaciones();
+
+    const mensaje = history.state?.mensaje;
+
+    if (mensaje) {
+      this.messageService.add({
+        severity: mensaje.severity,
+        summary: mensaje.summary,
+        detail: mensaje.detail,
+      });
+    }
   }
 
   cargarCotizaciones() {
+    this.loading = true;
     this.cotizacionService.findAll().subscribe({
       next: (res) => {
         if (res.idEstado === 0) {
           this.cotizaciones = res.datos || [];
+          this.loading = false;
         }
       },
       error: (err) => {
         console.error('Error al cargar cotizaciones:', err);
+        this.loading = false;
       },
     });
   }

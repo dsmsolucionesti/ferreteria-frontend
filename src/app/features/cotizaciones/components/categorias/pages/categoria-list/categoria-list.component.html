@@ -5,39 +5,40 @@
     @if (loading) {
     <app-spinner></app-spinner>
     } @else {
-    <div class="row">
-        <div class="col-12">
-            <div class="flex justify-content-end mb-3">
-                <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
-            </div>
-
-            <p-table [value]="categorias" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
-                [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Acciones</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-c>
-                    <tr>
-                        <td>{{ c.nombre }}</td>
-                        <td>{{ c.descripcion }}</td>
-                        <td>
-                            <div class="flex justify-content-center gap-3">
-                                <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
-                                    (click)="showFormulario(c.id)"></i>
-                                <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
-                                    (click)="eliminar($event, c.id)"></i>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+    <div class="flex justify-content-end mb-3">
+        <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
     </div>
 
+    <div class="card p-4 float-container">
+        @if (categorias.length === 0) {
+        <h4>No hay categorías</h4>
+        } @else {
+        <p-table [value]="categorias" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-c>
+                <tr>
+                    <td>{{ c.nombre }}</td>
+                    <td>{{ c.descripcion }}</td>
+                    <td>
+                        <div class="flex justify-content-center gap-3">
+                            <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
+                                (click)="showFormulario(c.id)"></i>
+                            <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
+                                (click)="eliminar($event, c.id)"></i>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        }
+    </div>
 
     <div class="card flex justify-center">
         <p-dialog [header]="modo === 'crear' ? 'Crear categoría' : 'Editar categoría'" [modal]="true"

@@ -1,13 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, PanelMenuModule],
+  imports: [RouterOutlet, PanelMenuModule, ToastModule, ConfirmDialogModule],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit {

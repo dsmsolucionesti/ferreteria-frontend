@@ -5,44 +5,46 @@
     @if (loading) {
     <app-spinner></app-spinner>
     } @else {
-    <div class="row">
-        <div class="col-12">
 
-            <div class="flex justify-content-end mb-3">
-                <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
-            </div>
+    <div class="flex justify-content-end mb-3">
+        <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
+    </div>
 
-            <p-table [value]="productos" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
-                [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Categoría</th>
-                        <th>Acciones</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-p>
-                    <tr>
-                        <td>{{ p.nombre }}</td>
-                        <td>{{ p.descripcion }}</td>
-                        <td>{{ p.precio | currency:'CLP' }}</td>
-                        <td>{{ p.stock_actual }}</td>
-                        <td>{{ p.categoria.nombre }}</td>
-                        <td>
-                            <div class="flex justify-content-center gap-3">
-                                <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
-                                    (click)="showFormulario(p.id)"></i>
-                                <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
-                                    (click)="eliminar($event, p.id)"></i>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+    <div class="card p-4 float-container">
+        @if (productos.length === 0) {
+        <h4>No hay productos</h4>
+        } @else {
+        <p-table [value]="productos" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-p>
+                <tr>
+                    <td>{{ p.nombre }}</td>
+                    <td>{{ p.descripcion }}</td>
+                    <td>{{ p.precio | clp }}</td>
+                    <td>{{ p.stock_actual }}</td>
+                    <td>{{ p.categoria.nombre }}</td>
+                    <td>
+                        <div class="flex justify-content-center gap-3">
+                            <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
+                                (click)="showFormulario(p.id)"></i>
+                            <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
+                                (click)="eliminar($event, p.id)"></i>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        }
     </div>
 
     <div class="card flex justify-center">
