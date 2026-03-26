@@ -9,10 +9,10 @@
     } @else {
     <div class="row">
         <div class="col-12">
+            <div class="flex justify-content-end mb-2">
+                <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
+            </div>
 
-            @if (loading) {
-            <div class="alert alert-info">{{loadingMessage}}</div>
-            } @else {
             <p-table [value]="categorias" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
@@ -29,7 +29,7 @@
                         <td>
                             <div class="flex gap-4 justify-content-center">
                                 <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
-                                    (click)="editar($event, c.id)"></i>
+                                    (click)="showFormulario(c.id)"></i>
                                 <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
                                     (click)="eliminar($event, c.id)"></i>
                             </div>
@@ -37,9 +37,44 @@
                     </tr>
                 </ng-template>
             </p-table>
-            }
         </div>
     </div>
+
+
+    <div class="card flex justify-center">
+        <p-dialog [header]="modo === 'crear' ? 'Crear categoría' : 'Editar categoría'" [modal]="true"
+            [(visible)]="shorFormulario" [style]="{ width: '25rem' }" (onHide)="onClose()">
+            <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-column gap-4">
+
+                <div class="flex flex-column gap-2">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" pInputText formControlName="nombre" placeholder="Ingrese nombre" />
+
+                    @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                    <small class="text-red-500">
+                        Nombre requerido (mínimo 3 caracteres)
+                    </small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="descripcion">Descripción</label>
+
+                    <textarea rows="5" cols="30" pTextarea id="descripcion" pInputTextarea formControlName="descripcion"
+                        placeholder="Ingrese descripción"></textarea>
+                </div>
+
+                <div class="flex justify-content-end gap-2">
+                    <p-button [label]="modo === 'crear' ? 'Guardar' : 'Actualizar'" icon="pi pi-check" type="submit"
+                        [disabled]="form.invalid">
+                    </p-button>
+                </div>
+
+            </form>
+
+        </p-dialog>
+    </div>
+
     }
 </div>
 <p-toast />
