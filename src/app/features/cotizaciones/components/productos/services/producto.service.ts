@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RespuestaProceso } from '../../../../../shared/models/respuesta-proceso.model';
 import { Producto } from '../models/producto.model';
@@ -8,17 +8,39 @@ import { Producto } from '../models/producto.model';
 export class ProductoService {
   private url = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
-  getAll(): Observable<RespuestaProceso<Producto>> {
+  findAll(): Observable<RespuestaProceso<Producto>> {
     return this.http.get<RespuestaProceso<Producto>>(`${this.url}/producto`);
   }
 
-  create(data: any): Observable<RespuestaProceso<Producto>> {
+  findById(id: number): Observable<RespuestaProceso<Producto>> {
+    return this.http.get<RespuestaProceso<Producto>>(
+      `${this.url}/producto/${id}`,
+    );
+  }
+
+  post(data: any): Observable<RespuestaProceso<Producto>> {
     console.log(data);
     return this.http.post<RespuestaProceso<Producto>>(
       `${this.url}/producto`,
       data,
+    );
+  }
+
+  patch(
+    id: number,
+    data: Partial<Producto>,
+  ): Observable<RespuestaProceso<Producto>> {
+    return this.http.patch<RespuestaProceso<Producto>>(
+      `${this.url}/producto/${id}`,
+      data,
+    );
+  }
+
+  delete(id: number): Observable<RespuestaProceso<Producto>> {
+    return this.http.delete<RespuestaProceso<Producto>>(
+      `${this.url}/producto/${id}`,
     );
   }
 }

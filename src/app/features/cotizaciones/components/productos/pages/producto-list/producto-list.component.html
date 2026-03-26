@@ -10,9 +10,10 @@
     <div class="row">
         <div class="col-12">
 
-            @if (loading) {
-            <div class="alert alert-info">{{loadingMessage}}</div>
-            } @else {
+            <div class="flex justify-content-end mb-2">
+                <p-button label="Nuevo registro" size="small" (click)="showFormulario()" />
+            </div>
+
             <p-table [value]="productos" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
                 [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
@@ -35,105 +36,82 @@
                         <td>
                             <div class="flex gap-4 justify-content-center">
                                 <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"
-                                    (click)="editar(p.id)"></i>
+                                    (click)="showFormulario(p.id)"></i>
                                 <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"
-                                    (click)="eliminar(p.id)"></i>
+                                    (click)="eliminar($event, p.id)"></i>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-            }
         </div>
+    </div>
+
+    <div class="card flex justify-center">
+        <p-dialog [header]="modo === 'crear' ? 'Crear producto' : 'Editar producto'" [modal]="true"
+            [(visible)]="shorFormulario" [style]="{ width: '25rem' }" (onHide)="onClose()">
+            <form [formGroup]="form" (ngSubmit)="guardar()" class="flex flex-column gap-4">
+
+                <div class="flex flex-column gap-2">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" pInputText formControlName="nombre" placeholder="Ingrese nombre" />
+
+                    @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+                    <small class="text-red-500">
+                        Nombre requerido (mínimo 3 caracteres)
+                    </small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="descripcion">Categoría</label>
+                    <p-select [options]="categorias" formControlName="categoria" optionLabel="nombre" optionValue="id"
+                        placeholder="Selecciona" class="w-full md:w-56" />
+                    @if (form.get('stock_actual')?.invalid && form.get('stock_actual')?.touched) {
+                    <small class="text-red-500">
+                        Nombre requerido (mínimo 3 caracteres)
+                    </small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="descripcion">Precio</label>
+                    <p-inputnumber inputId="integeronly" id="precio" pInputNumber formControlName="precio" />
+                    @if (form.get('precio')?.invalid && form.get('precio')?.touched) {
+                    <small class="text-red-500">
+                        Precio es requerido
+                    </small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="descripcion">Stock</label>
+                    <p-inputnumber inputId="integeronly" id="stock_actual" pInputNumber
+                        formControlName="stock_actual" />
+                    @if (form.get('stock_actual')?.invalid && form.get('stock_actual')?.touched) {
+                    <small class="text-red-500">
+                        Stock es requerido
+                    </small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="descripcion">Descripción</label>
+                    <textarea rows="5" cols="30" pTextarea id="descripcion" pInputTextarea formControlName="descripcion"
+                        placeholder="Ingrese descripción"></textarea>
+                </div>
+
+                <div class="flex justify-content-end gap-2">
+                    <p-button [label]="modo === 'crear' ? 'Guardar' : 'Actualizar'" icon="pi pi-check" type="submit"
+                        [disabled]="form.invalid">
+                    </p-button>
+                </div>
+
+            </form>
+
+        </p-dialog>
     </div>
     }
 </div>
-
-
-<!-- <div class="container-fluid">
-    <h4>Productos</h4>
-    <div class="row mt-3">
-        <div class="col-8">
-
-
-            @if (loading) {
-            <div class="alert alert-info">{{loadingMessage}}</div>
-            } @else {
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Categoría</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (p of productos; track p.id) {
-                    <tr>
-                        <td>{{ p.nombre }}</td>
-                        <td>{{ p.descripcion }}</td>
-                        <td>{{ p.precio | currency:'CLP' }}</td>
-                        <td>{{ p.stock_actual }}</td>
-                        <td>{{ p.categoria.nombre }}</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-            }
-        </div>
-        <div class="col-4">
-            <h5>Crear producto</h5>
-            <form [formGroup]="form">
-                <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre</label>
-                    <input type="text" class="form-control" formControlName="nombre">
-                    @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
-                    <div class="text-danger">El nombre es requerido</div>
-                    }
-                </div>
-                <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripción</label>
-                    <input type="text" class="form-control" formControlName="descripcion">
-                    @if (form.get('descripcion')?.invalid && form.get('descripcion')?.touched) {
-                    <div class="text-danger">La descripción es requerida</div>
-                    }
-                </div>
-                <div class="mb-3">
-                    <label for="precio" class="form-label">Precio</label>
-                    <input type="number" class="form-control" formControlName="precio">
-                    @if (form.get('precio')?.invalid && form.get('precio')?.touched) {
-                    <div class="text-danger">El precio es requerido</div>
-                    }
-                </div>
-                <div class="mb-3">
-                    <label for="stock_actual" class="form-label">Stock</label>
-                    <input type="number" class="form-control" formControlName="stock_actual">
-                    @if (form.get('stock_actual')?.invalid && form.get('stock_actual')?.touched) {
-                    <div class="text-danger">El stock es requerido</div>
-                    }
-                </div>
-                <div class="mb-3">
-                    <label for="categoria" class="form-label">Categoría</label>
-                    <select class="form-select" formControlName="categoria">
-                        <option value="" selected>Seleccione una categoría</option>
-                        @for (c of categorias; track c.id) {
-                        <option [value]="c.id">{{ c.nombre }}</option>
-                        }
-                    </select>
-                    @if (form.get('categoria')?.invalid && form.get('categoria')?.touched) {
-                    <div class="text-danger">La categoría es requerida</div>
-                    }
-                </div>
-
-                <button type="button" class="btn btn-primary" [disabled]="form.invalid"
-                    (click)="guardarProducto()">Guardar</button>
-            </form>
-
-            @if (mensaje) {
-            <div class="alert alert-info mt-3">{{ mensaje }}</div>
-            }
-        </div>
-    </div>
-</div> -->
+<p-toast />
+<p-confirmdialog />
