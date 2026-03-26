@@ -19,7 +19,7 @@
                 <div class="field col-12 md:col-6">
                     <label for="clientes">Cliente</label>
                     <p-select [options]="clientes" formControlName="clientes" optionLabel="nombre" optionValue="id"
-                        placeholder="Selecciona" class="w-full md:w-56" />
+                        placeholder="Selecciona" class="w-full md:w-56" emptyMessage="No se encontraron clientes" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="usuario">Usuario</label>
@@ -51,7 +51,7 @@
                 <div class="field col-12 md:col-3">
                     <label for="productos">Productos</label>
                     <p-select [options]="productos" formControlName="productos" optionLabel="nombre" optionValue="id"
-                        placeholder="Selecciona" class="w-full md:w-56" (onChange)="onProductoChange($event)" />
+                        placeholder="Selecciona" class="w-full md:w-56" (onChange)="onProductoChange($event)" emptyMessage="No se encontraron productos" />
                 </div>
                 @if(selectProducto) {
                 <div class="field col-12 md:col-3">
