@@ -1,9 +1,8 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 
 import { ChartModule } from 'primeng/chart';
 import { CategoriaService } from '../../cotizaciones/components/categorias/services/categoria.service';
-import { Categoria } from '../../cotizaciones/components/categorias/models/categoria.model';
+import { ProductoService } from '../../cotizaciones/components/productos/services/producto.service';
 
 @Component({
   selector: 'app-home',
@@ -13,52 +12,92 @@ import { Categoria } from '../../cotizaciones/components/categorias/models/categ
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  data: any;
   options: any;
   categorias: any = [];
+  productos: any = [];
+
+  categoriasChart: any;
+  productosChart: any;
 
   private categoriaService = inject(CategoriaService);
+  private productoService = inject(ProductoService);
 
   ngOnInit() {
-    this.initChart();
     this.categoriaService.findAll().subscribe({
       next: (response) => {
         this.categorias = response.datos;
-        console.log(this.categorias)
+        this.buildCategoriasChart();
       },
-      error: (error) => {
-        console.log(error);
+    });
+
+    this.productoService.findAll().subscribe({
+      next: (response) => {
+        this.productos = response.datos;
+        this.buildProductosChart();
       },
     });
   }
 
-  initChart() {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue('--p-text-color');
-    const textColorSecondary = documentStyle.getPropertyValue(
-      '--p-text-muted-color',
-    );
-    const surfaceBorder = documentStyle.getPropertyValue(
-      '--p-content-border-color',
-    );
-
-    this.data = {
-      labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
+  buildCategoriasChart() {
+    this.categoriasChart = {
+      labels: this.categorias.map((c: any) => c.nombre),
       datasets: [
         {
-          label: 'Ventas',
-          data: [15000, 22000, 18000, 25000],
+          label: 'Categorías',
+          data: this.categorias.map(() => 1),
           backgroundColor: [
-            'rgba(249, 115, 22, 0.2)',
-            'rgba(6, 182, 212, 0.2)',
-            'rgb(107, 114, 128, 0.2)',
-            'rgba(139, 92, 246, 0.2)',
+            '#42A5F5',
+            '#66BB6A',
+            '#FFA726',
+            '#EF5350',
+            '#AB47BC',
+            '#26C6DA',
           ],
           borderColor: [
-            'rgb(249, 115, 22)',
-            'rgb(6, 182, 212)',
-            'rgb(107, 114, 128)',
-            'rgb(139, 92, 246)',
+            '#1E88E5',
+            '#43A047',
+            '#FB8C00',
+            '#E53935',
+            '#8E24AA',
+            '#00ACC1',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+
+    this.options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+        },
+      },
+    };
+  }
+
+  buildProductosChart() {
+    this.productosChart = {
+      labels: this.productos.map((p: any) => p.nombre),
+      datasets: [
+        {
+          label: 'Stock',
+          data: this.productos.map((p: any) => p.stock_actual),
+          backgroundColor: [
+            '#42A5F5',
+            '#66BB6A',
+            '#FFA726',
+            '#EF5350',
+            '#AB47BC',
+            '#26C6DA',
+          ],
+          borderColor: [
+            '#1E88E5',
+            '#43A047',
+            '#FB8C00',
+            '#E53935',
+            '#8E24AA',
+            '#00ACC1',
           ],
           borderWidth: 1,
         },

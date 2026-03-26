@@ -1,13 +1,12 @@
-<div class="flex h-screen">
-    <div class="w-18rem p-3 bg-gray-900 text-white">
+<div class="flex h-screen overflow-hidden">
+    <div class="w-18rem p-3 bg-gray-900 text-white menu">
         <h3 class="mb-4">FERRETERÍA OTTO</h3>
         <div class="card flex justify-center">
             <p-panelmenu [model]="items" class="w-full md:w-80" />
         </div>
     </div>
 
-    <div class="flex-1 p-4 bg-gray-100">
+    <div class="flex-1 p-4 bg-gray-200 content">
         <router-outlet></router-outlet>
     </div>
-
 </div>

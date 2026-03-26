@@ -82,3 +82,15 @@ body {
 //   transform: scale(1.1);
 //   transition: all 0.2s ease;
 // }
+
+.menu {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.content {
+  overflow-y: auto;
+  height: 100vh;
+}
