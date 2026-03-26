@@ -20,6 +20,8 @@ import { SpinnerComponent } from '../../../../shared/components/spinner/pages/sp
 import { CotizacionesService } from '../../services/cotizaciones.service';
 import { Cotizaciones } from '../../models/cotizaciones.model';
 import { EstadoCotizacion } from '../../cotizaciones.enum';
+import { CotizacionesFormComponent } from "../cotizaciones-form/cotizaciones-form.component";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-cotizaciones-list',
@@ -41,7 +43,9 @@ import { EstadoCotizacion } from '../../cotizaciones.enum';
     TextareaModule,
     ToastModule,
     TooltipModule,
-  ],
+    CotizacionesFormComponent,
+    RouterLink
+],
   providers: [MessageService, ConfirmationService],
   standalone: true,
 })
@@ -61,6 +65,7 @@ export class CotizacionesListComponent implements OnInit {
   loading: boolean = false;
   loadingMessage: string = '';
   shorFormulario: boolean = false;
+  showForm: boolean = false;
 
   ngOnInit(): void {
     this.cargarCotizaciones();

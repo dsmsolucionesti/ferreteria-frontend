@@ -119,7 +119,7 @@ export class ProductoListComponent implements OnInit {
           descripcion: producto.descripcion,
           precio: producto.precio,
           stock_actual: producto.stock_actual,
-          categoria: producto.categoria.id,
+          categoria: producto.categoria?.id || 0,
         });
       }
     } else {

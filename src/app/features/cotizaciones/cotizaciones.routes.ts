@@ -8,4 +8,11 @@ export const COTIZACIONES_ROUTES: Routes = [
         (m) => m.CotizacionesListComponent,
       ),
   },
+  {
+    path: 'nuevo',
+    loadComponent: () =>
+      import('./pages/cotizaciones-form/cotizaciones-form.component').then(
+        (m) => m.CotizacionesFormComponent,
+      ),
+  },
 ];

@@ -2,6 +2,11 @@
     <div class="col-12">
         <h3>Cotizaciones</h3>
     </div>
+
+    <div class="flex justify-content-end mb-3">
+        <p-button label="Nueva cotización" routerLink="/cotizaciones/nuevo" />
+    </div>
+
     @if(loading) {
     <app-spinner></app-spinner>
     } @else {
@@ -25,7 +30,8 @@
                 <td>{{ c.usuario?.nombre }}</td>
                 <td>{{ c.total }}</td>
                 <td>{{ c.fecha | date:'dd/MM/yyyy' }}</td>
-                <td><p-tag [value]="c.estadoCotizacion?.nombre" [severity]="getSeverity(c.estadoCotizacion?.nombre)"></p-tag></td>
+                <td><p-tag [value]="c.estadoCotizacion?.nombre"
+                        [severity]="getSeverity(c.estadoCotizacion?.nombre)"></p-tag></td>
                 <td>
                     <div class="flex justify-content-center gap-3">
                         <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"></i>

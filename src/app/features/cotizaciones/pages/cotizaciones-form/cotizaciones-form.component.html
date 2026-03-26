@@ -1,0 +1,103 @@
+@if (loading) {
+<app-spinner> </app-spinner>
+} @else {
+<div class="p-4">
+    <div class="col-12">
+        <h3>Nueva cotización</h3>
+    </div>
+
+    @if(loading) {
+    <app-spinner></app-spinner>
+    } @else {
+    <div class="card p-4" style="background-color: #fff; border-radius: 15px;">
+        <form [formGroup]="form" (ngSubmit)="siguiente()" class="flex flex-column gap-4">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label for="clientes">Cliente</label>
+                    <p-select [options]="clientes" formControlName="clientes" optionLabel="nombre" optionValue="id"
+                        placeholder="Selecciona" class="w-full md:w-56" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="usuario">Usuario</label>
+                    <input id="usuario" pInputText formControlName="usuario" placeholder="Ingrese usuario"
+                        class="w-full" />
+                </div>
+            </div>
+
+            @if (!habilitarDetalle) {
+            <div class="flex justify-content-end gap-2">
+                <p-button label="Siguiente" icon="pi pi-check" type="submit" [disabled]="form.invalid">
+                </p-button>
+            </div>
+            }
+        </form>
+    </div>
+    }
+</div>
+}
+
+@if (habilitarDetalle) {
+<div class="p-4">
+    <div class="col-12">
+        <h3>Detalle de la cotización</h3>
+    </div>
+    <div class="card p-4" style="background-color: #fff; border-radius: 15px;">
+        <form [formGroup]="formDetalle" class="flex flex-column gap-4">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-3">
+                    <label for="productos">Productos</label>
+                    <p-select [options]="productos" formControlName="productos" optionLabel="nombre" optionValue="id"
+                        placeholder="Selecciona" class="w-full md:w-56" (onChange)="onProductoChange($event)" />
+                </div>
+                @if(selectProducto) {
+                <div class="field col-12 md:col-3">
+                    <label for="productos">Cantidad</label>
+                    <input id="cantidad" pInputText formControlName="cantidad" class="w-full"
+                        (input)="onCantidadChange($event)" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label for="valorUnitario">Valor unitario</label>
+                    <input id="valorUnitario" pInputText formControlName="valorUnitario" class="w-full" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label for="subtotal">Subtotal</label>
+                    <input id="subtotal" pInputText formControlName="subtotal" class="w-full" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <p-button label="Agregar" icon="pi pi-plus" type="button" (onClick)="agregarProductos()" />
+                </div>
+                }
+
+            </div>
+        </form>
+
+        @if (showTableProductos) {
+        <p-table [value]="cotizacionDetalle" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
+            [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Valor unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-c>
+                <tr>
+                    <td>{{ c.idProducto.nombre }}</td>
+                    <td>{{ c.cantidad }}</td>
+                    <td>{{ c.precioUnitario }}</td>
+                    <td>{{ c.subtotal }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <div class="field col-12 md:col-3">
+            <p-button label="Agregar" icon="pi pi-plus" type="button" (onClick)="enviarCotizacion()" />
+        </div>
+        }
+    </div>
+
+
+</div>
+}

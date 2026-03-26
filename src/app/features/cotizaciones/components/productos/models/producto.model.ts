@@ -4,8 +4,8 @@ export interface Producto {
   id: number;
   nombre: string;
   descripcion?: string;
-  precio: number;
+  precio?: number;
   stock_actual?: number;
-  categoria: Categoria;
+  categoria?: Categoria;
   activo?: boolean;
 }
