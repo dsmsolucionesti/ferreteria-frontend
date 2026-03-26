@@ -50,3 +50,13 @@ body {
   --p-surface-0: #212529;
 }
 
+.p-panelmenu-panel {
+  margin: 5px 0px;
+  border-radius: 10px !important;
+  padding: 0 !important;
+}
+
+.p-panelmenu-content ul {
+  padding-left: 15px !important;
+  margin: 0;
+}

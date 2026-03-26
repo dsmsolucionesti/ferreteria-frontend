@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { CotizacionesService } from '../../services/cotizaciones.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Cotizaciones } from '../../models/cotizaciones.model';
@@ -8,7 +8,7 @@ import { Cotizaciones } from '../../models/cotizaciones.model';
   selector: 'app-cotizaciones-list',
   templateUrl: './cotizaciones-list.component.html',
   styleUrls: ['./cotizaciones-list.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   standalone: true,
 })
 export class CotizacionesListComponent implements OnInit {
