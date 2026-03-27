@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
   productos: any = [];
   cotizaciones: any = [];
   estadoCotizaciones: any = [];
+  cantidadCotizaciones: number = 0;
 
   categoriasChart: any;
   productosChart: any;
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit {
         this.cotizaciones = cotizaciones.datos;
 
         this.estadoCotizaciones = this.mapearEstados();
+        this.cantidadCotizaciones = this.estadoCotizaciones.reduce((acc: number, estado: any) => acc + estado.cantidad, 0);
 
         this.buildCharts();
         this.loading = false;
