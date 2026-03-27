@@ -81,12 +81,7 @@ export class LayoutComponent implements OnInit {
             label: 'Usuarios',
             icon: 'pi pi-user',
             routerLink: '/mantenedores/usuarios',
-          },
-          {
-            label: 'Ver todos',
-            icon: 'pi pi-angle-double-down',
-            routerLink: '/mantenedores',
-          },
+          }
         ],
       },
     ];
