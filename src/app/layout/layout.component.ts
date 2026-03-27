@@ -5,27 +5,37 @@ import { RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Button } from 'primeng/button';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, PanelMenuModule, ToastModule, ConfirmDialogModule],
+  imports: [
+    RouterOutlet,
+    PanelMenuModule,
+    ToastModule,
+    ConfirmDialogModule,
+    Button,
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   items: MenuItem[] = [];
+  usuario: string = '';
 
   ngOnInit() {
-    let v;
-
+    this.usuario = localStorage.getItem('usuario') || 'Usuario';
+    
     this.items = [
       {
         label: 'Inicio',
         icon: 'pi pi-home',
-        command: () => this.router.navigate(['/']),
+        command: () => this.router.navigate(['/home']),
       },
       {
         label: 'Cotizaciones',
@@ -82,5 +92,8 @@ export class LayoutComponent implements OnInit {
     ];
   }
 
-  // menu: MenuItem[] = [];
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
+  }
 }

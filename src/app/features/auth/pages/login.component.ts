@@ -2,8 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
+import { ProgressSpinner } from 'primeng/progressspinner';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
@@ -15,12 +18,15 @@ import { InputTextModule } from 'primeng/inputtext';
     DividerModule,
     InputTextModule,
     Button,
+    ProgressSpinner,
+    ConfirmDialogModule,
+    ToastModule,
     ReactiveFormsModule,
   ],
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
-  providers: [MessageService],
+  providers: [ConfirmationService, MessageService],
 })
 export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -65,6 +71,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error: () => {
+        this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',

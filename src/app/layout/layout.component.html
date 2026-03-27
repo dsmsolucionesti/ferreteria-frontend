@@ -1,8 +1,19 @@
 <div class="flex h-screen overflow-hidden">
-    <div class="w-18rem p-3 bg-gray-900 text-white menu">
-        <h3 class="mb-4">FERRETERÍA OTTO</h3>
-        <div class="card flex justify-center">
-            <p-panelmenu [model]="items" class="w-full md:w-80" />
+
+    <div class="w-18rem p-3 bg-gray-900 text-white menu flex flex-column justify-content-between">
+        <div>
+            <h3 class="mb-4">FERRETERÍA OTTO</h3>
+            <div class="card flex justify-center">
+                <p-panelmenu [model]="items" class="w-full md:w-80" />
+            </div>
+        </div>
+
+        <div class="mt-4 border-top-1 border-gray-700 pt-3 flex flex-column gap-2">
+            <span class="text-sm">
+                Bienvenido(a), {{ usuario }}
+            </span>
+            <p-button label="Cerrar sesión" icon="pi pi-sign-out" severity="danger" class="w-full"
+                (onClick)="logout()"></p-button>
         </div>
     </div>
 
