@@ -2,8 +2,12 @@
 
     <div class="w-18rem p-3 bg-gray-900 text-white menu flex flex-column justify-content-between">
         <div>
-            <h3 class="mb-4">FERRETERÍA OTTO</h3>
-            <div class="card flex justify-center">
+            <div class="flex flex-column mb-3">
+                <h3 class="mb-2">FERRETERÍA OTTO</h3>
+                <span class="text-sm block">Sistema de gestión</span>
+            </div>
+
+            <div class="card flex justify-center border-top-1 border-gray-700 pt-3">
                 <p-panelmenu [model]="items" class="w-full md:w-80" />
             </div>
         </div>
