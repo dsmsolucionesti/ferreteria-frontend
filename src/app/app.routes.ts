@@ -5,14 +5,22 @@ import { MANTENEDORES_ROUTES } from './features/mantenedores/mantenedores.routes
 import { COTIZACIONES_ROUTES } from './features/cotizaciones/cotizaciones.routes';
 import { HOME_ROUTES } from './features/home/home.routes';
 import { LayoutComponent } from './layout/layout.component';
+import { authGuard } from './core/guards/auth.guard';
+import { LoginComponent } from './features/auth/pages/login.component';
 
 export const routes: Routes = [
   {
     path: '',
+    component: LoginComponent,
+  },
+  {
+    path: '',
     component: LayoutComponent,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
     children: [
       {
-        path: '',
+        path: 'home',
         children: HOME_ROUTES,
       },
       {
@@ -31,7 +39,8 @@ export const routes: Routes = [
         path: 'mantenedores',
         children: MANTENEDORES_ROUTES,
       },
-      { path: '**', redirectTo: '' },
     ],
   },
+
+  { path: '**', redirectTo: '' },
 ];

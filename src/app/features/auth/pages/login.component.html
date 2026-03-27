@@ -1,0 +1,21 @@
+<div class="flex align-items-center justify-content-center min-h-screen">
+    <div class="card w-full md:w-6 lg:w-4">
+
+        <h2 class="text-center mb-4">Iniciar sesión</h2>
+
+        <form [formGroup]="form" (ngSubmit)="login()" class="flex flex-column gap-3">
+            <div class="flex flex-column gap-2">
+                <label for="email">Email</label>
+                <input id="email" type="email" pInputText formControlName="email" placeholder="Ingrese email"
+                    class="w-full" />
+            </div>
+            <div class="flex flex-column gap-2">
+                <label for="password">Password</label>
+                <input id="password" type="password" pInputText formControlName="password"
+                    placeholder="Ingrese password" class="w-full" />
+            </div>
+            <p-button label="Ingresar" icon="pi pi-sign-in" type="submit" [disabled]="form.invalid"
+                class="w-full"></p-button>
+        </form>
+    </div>
+</div>
