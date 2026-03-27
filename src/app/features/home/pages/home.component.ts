@@ -1,13 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 import { ChartModule } from 'primeng/chart';
 import { CategoriaService } from '../../cotizaciones/components/categorias/services/categoria.service';
 import { ProductoService } from '../../cotizaciones/components/productos/services/producto.service';
+import { SpinnerComponent } from '../../../shared/components/spinner/pages/spinner.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ChartModule],
+  imports: [ChartModule, SpinnerComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
@@ -19,26 +21,31 @@ export class HomeComponent implements OnInit {
   categoriasChart: any;
   productosChart: any;
 
+  loading: boolean = false;
+
   private categoriaService = inject(CategoriaService);
   private productoService = inject(ProductoService);
 
   ngOnInit() {
-    this.categoriaService.findAll().subscribe({
-      next: (response) => {
-        this.categorias = response.datos;
-        this.buildCategoriasChart();
-      },
-    });
+    this.loading = true;
+    forkJoin({
+      categorias: this.categoriaService.findAll(),
+      productos: this.productoService.findAll(),
+    }).subscribe({
+      next: ({ categorias, productos }) => {
+        this.categorias = categorias.datos;
+        this.productos = productos.datos;
 
-    this.productoService.findAll().subscribe({
-      next: (response) => {
-        this.productos = response.datos;
-        this.buildProductosChart();
+        this.buildCharts();
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
       },
     });
   }
 
-  buildCategoriasChart() {
+  buildCharts() {
     this.categoriasChart = {
       labels: this.categorias.map((c: any) => c.nombre),
       datasets: [
@@ -66,17 +73,6 @@ export class HomeComponent implements OnInit {
       ],
     };
 
-    this.options = {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-        },
-      },
-    };
-  }
-
-  buildProductosChart() {
     this.productosChart = {
       labels: this.productos.map((p: any) => p.nombre),
       datasets: [
@@ -111,6 +107,8 @@ export class HomeComponent implements OnInit {
           display: true,
         },
       },
+      aspectRatio: 1,
+      maintainAspectRatio: false,
     };
   }
 }
