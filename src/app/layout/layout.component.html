@@ -10,7 +10,7 @@
 
         <div class="mt-4 border-top-1 border-gray-700 pt-3 flex flex-column gap-2">
             <span class="text-sm">
-                Bienvenido(a), {{ usuario }}
+                Bienvenido(a), {{ usuario.nombre }}
             </span>
             <p-button label="Cerrar sesión" icon="pi pi-sign-out" severity="danger" class="w-full"
                 (onClick)="logout()"></p-button>

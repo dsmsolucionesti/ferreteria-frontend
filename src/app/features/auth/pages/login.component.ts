@@ -60,12 +60,12 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(payload).subscribe({
       next: (resp) => {
-        this.authService.guardarToken(resp.token);
+        this.authService.guardarToken(resp);
 
         this.messageService.add({
           severity: 'success',
           summary: 'Login correcto',
-          detail: 'Bienvenido 👋',
+          detail: 'Bienvenido',
         });
 
         this.router.navigate(['/home']);

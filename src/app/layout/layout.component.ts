@@ -26,11 +26,11 @@ export class LayoutComponent implements OnInit {
   private authService = inject(AuthService);
 
   items: MenuItem[] = [];
-  usuario: string = '';
+  usuario: any;
 
   ngOnInit() {
-    this.usuario = localStorage.getItem('usuario') || 'Usuario';
-    
+    this.usuario = JSON.parse(localStorage.getItem('usuario')!) || 'Usuario';
+
     this.items = [
       {
         label: 'Inicio',

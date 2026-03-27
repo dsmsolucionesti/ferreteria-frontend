@@ -14,8 +14,9 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/auth/login`, data);
   }
 
-  guardarToken(token: string) {
-    localStorage.setItem('token', token);
+  guardarToken(data: any) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('usuario', JSON.stringify(data.usuario));
   }
 
   obtenerToken() {
