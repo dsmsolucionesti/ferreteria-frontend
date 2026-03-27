@@ -39,11 +39,11 @@ export class LayoutComponent implements OnInit {
       },
       {
         label: 'Cotizaciones',
-        icon: 'pi pi-file',
+        icon: 'pi pi-file-check',
         items: [
           {
             label: 'Cotizaciones',
-            icon: 'pi pi-file',
+            icon: 'pi pi-file-check',
             routerLink: '/cotizaciones',
           },
           {
@@ -62,11 +62,15 @@ export class LayoutComponent implements OnInit {
         label: 'Nota de venta',
         icon: 'pi pi-shopping-cart',
         routerLink: '/nota-venta',
+        disabled: true,
+        visible: false,
       },
       {
         label: 'Pagos',
         icon: 'pi pi-credit-card',
         routerLink: '/pagos',
+        disabled: true,
+        visible: false,
       },
       {
         label: 'Mantenedores',
@@ -79,9 +83,9 @@ export class LayoutComponent implements OnInit {
           },
           {
             label: 'Usuarios',
-            icon: 'pi pi-user',
+            icon: 'pi pi-user-edit',
             routerLink: '/mantenedores/usuarios',
-          }
+          },
         ],
       },
     ];
