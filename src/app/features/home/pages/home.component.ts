@@ -2,14 +2,17 @@ import { Component, inject, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 
 import { ChartModule } from 'primeng/chart';
+import { TagModule } from 'primeng/tag';
 import { CategoriaService } from '../../cotizaciones/components/categorias/services/categoria.service';
 import { ProductoService } from '../../cotizaciones/components/productos/services/producto.service';
 import { SpinnerComponent } from '../../../shared/components/spinner/pages/spinner.component';
+import { CotizacionesService } from '../../cotizaciones/services/cotizaciones.service';
+import { EstadoCotizacionName } from '../../cotizaciones/cotizaciones.enum';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ChartModule, SpinnerComponent],
+  imports: [ChartModule, TagModule, SpinnerComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
@@ -17,6 +20,8 @@ export class HomeComponent implements OnInit {
   options: any;
   categorias: any = [];
   productos: any = [];
+  cotizaciones: any = [];
+  estadoCotizaciones: any = [];
 
   categoriasChart: any;
   productosChart: any;
@@ -25,16 +30,21 @@ export class HomeComponent implements OnInit {
 
   private categoriaService = inject(CategoriaService);
   private productoService = inject(ProductoService);
+  private cotizacionesSerivice = inject(CotizacionesService);
 
   ngOnInit() {
     this.loading = true;
     forkJoin({
       categorias: this.categoriaService.findAll(),
       productos: this.productoService.findAll(),
+      cotizaciones: this.cotizacionesSerivice.findAll(),
     }).subscribe({
-      next: ({ categorias, productos }) => {
+      next: ({ categorias, productos, cotizaciones }) => {
         this.categorias = categorias.datos;
         this.productos = productos.datos;
+        this.cotizaciones = cotizaciones.datos;
+
+        this.estadoCotizaciones = this.mapearEstados();
 
         this.buildCharts();
         this.loading = false;
@@ -110,5 +120,48 @@ export class HomeComponent implements OnInit {
       aspectRatio: 1,
       maintainAspectRatio: false,
     };
+  }
+
+  mapearEstados() {
+    const estadosBase = {
+      Pendiente: { cantidad: 0, severity: 'secondary' },
+      Enviada: { cantidad: 0, severity: 'info' },
+      Aceptada: { cantidad: 0, severity: 'success' },
+      Rechazada: { cantidad: 0, severity: 'danger' },
+      Vencida: { cantidad: 0, severity: 'warn' },
+      Cancelada: { cantidad: 0, severity: 'contrast' },
+    };
+
+    const estadosMap = {
+      [EstadoCotizacionName.PENDIENTE]: 'Pendiente',
+      [EstadoCotizacionName.ENVIADA]: 'Enviada',
+      [EstadoCotizacionName.ACEPTADA]: 'Aceptada',
+      [EstadoCotizacionName.RECHAZADA]: 'Rechazada',
+      [EstadoCotizacionName.VENCIDA]: 'Vencida',
+      [EstadoCotizacionName.CANCELADA]: 'Cancelada',
+    };
+
+    const resumen = this.cotizaciones.reduce(
+      (acc: any, cotizacion: any) => {
+        const estado =
+          estadosMap[
+            cotizacion.estadoCotizacion.nombre as keyof typeof estadosMap
+          ];
+
+        if (!estado) return acc;
+
+        acc[estado].cantidad++;
+
+        return acc;
+      },
+      { ...estadosBase },
+    );
+    const resultado = Object.keys(resumen).map((key) => ({
+      nombre: key + 's',
+      cantidad: resumen[key].cantidad,
+      severity: resumen[key].severity,
+    }));
+
+    return resultado;
   }
 }

@@ -6,3 +6,12 @@ export enum EstadoCotizacion {
   VENCIDA = 5,
   CANCELADA = 6,
 }
+
+export enum EstadoCotizacionName {
+  PENDIENTE = 'PENDIENTE',
+  ENVIADA = 'ENVIADA',
+  ACEPTADA = 'ACEPTADA',
+  RECHAZADA = 'RECHAZADA',
+  VENCIDA = 'VENCIDA',
+  CANCELADA = 'CANCELADA',
+}

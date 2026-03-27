@@ -2,16 +2,44 @@
 <app-spinner></app-spinner>
 } @else {
 <div class="grid">
-    <div class="col-12 md:col-6">
-        <div class="card p-3 float-container">
+    <div class="col-12 md:col-4">
+        <div class="card p-3 float-container size-box-dashboard">
+            <h4>Estado de cotizaciones</h4>
+
+            <div class="grid mb-3">
+                @for (estado of estadoCotizaciones; track $index) {
+                <div class="col-12 md:col-4">
+                    <div class="card flex justify-center">
+                        <p-tag [severity]="estado.severity" [value]="estado.nombre + ' : ' + estado.cantidad"
+                            style="width: 100%;" />
+                    </div>
+                </div>
+                }
+            </div>
+
+            <div class="grid mt-3">
+                <div class="col-12 md:col-12">
+                    <div class="card flex justify-center">
+                        <p-tag [value]="'Total de cotizaciones en sistema :' + estadoCotizaciones.length"
+                            style="width: 100%;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 md:col-4">
+        <div class="card p-3 float-container size-box-dashboard">
+            <h4>Categorías en sistema</h4>
             <div class="chart-container">
                 <p-chart type="bar" [data]="categoriasChart" [options]="options"></p-chart>
             </div>
         </div>
     </div>
 
-    <div class="col-12 md:col-6">
-        <div class="card p-3 float-container">
+    <div class="col-12 md:col-4">
+        <div class="card p-3 float-container size-box-dashboard">
+            <h4>Stock de productos</h4>
             <div class="chart-container">
                 <p-chart type="bar" [data]="productosChart" [options]="options"></p-chart>
             </div>
