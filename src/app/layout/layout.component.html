@@ -26,5 +26,14 @@
     </div>
 </div>
 
+<p-dialog header="Sesión finalizada" [(visible)]="mostrarModalSesion" [modal]="true" [closable]="false"
+    [draggable]="false">
+    <p>La sesión ha expirado. Debes iniciar sesión nuevamente.</p>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Aceptar" icon="pi pi-sign-in" (onClick)="irALogin()"></p-button>
+    </ng-template>
+</p-dialog>
+
 <p-toast />
 <p-confirmdialog />

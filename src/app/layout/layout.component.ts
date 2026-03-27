@@ -7,6 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Button } from 'primeng/button';
 import { AuthService } from '../core/services/auth.service';
+import { Dialog } from "primeng/dialog";
 
 @Component({
   selector: 'app-layout',
@@ -17,7 +18,8 @@ import { AuthService } from '../core/services/auth.service';
     ToastModule,
     ConfirmDialogModule,
     Button,
-  ],
+    Dialog
+],
   providers: [MessageService, ConfirmationService],
   templateUrl: './layout.component.html',
 })
@@ -27,8 +29,13 @@ export class LayoutComponent implements OnInit {
 
   items: MenuItem[] = [];
   usuario: any;
+  mostrarModalSesion: boolean = false;
 
   ngOnInit() {
+    this.authService.sessionExpired$.subscribe(() => {
+      this.mostrarModalSesion = true;
+    });
+
     this.usuario = JSON.parse(localStorage.getItem('usuario')!) || 'Usuario';
 
     this.items = [
@@ -89,6 +96,11 @@ export class LayoutComponent implements OnInit {
         ],
       },
     ];
+  }
+
+  irALogin() {
+    this.mostrarModalSesion = false;
+    this.router.navigate(['/']);
   }
 
   logout() {

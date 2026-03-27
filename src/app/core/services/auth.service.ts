@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/api';
+  private sessionExpiredSource = new Subject<void>();
+  public sessionExpired$ = this.sessionExpiredSource.asObservable();
+  private yaMostrado: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -36,5 +39,12 @@ export class AuthService {
     if (!token) return null;
 
     return JSON.parse(atob(token.split('.')[1]));
+  }
+
+  emitirSesionExpirada() {
+    if (!this.yaMostrado) {
+      this.sessionExpiredSource.next();
+      this.yaMostrado = true;
+    }
   }
 }
