@@ -29,4 +29,11 @@ export class AuthService {
   estaLogueado(): boolean {
     return !!this.obtenerToken();
   }
+
+  getUsuarioDesdeToken() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    return JSON.parse(atob(token.split('.')[1]));
+  }
 }

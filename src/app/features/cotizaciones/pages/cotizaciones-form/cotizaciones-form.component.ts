@@ -23,6 +23,7 @@ import { DetalleCotizacion } from '../../models/detalle-cotizacion.model';
 import { ClpPipe } from '../../../../shared/pipes/moneda.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-cotizaciones-form',
@@ -50,6 +51,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class CotizacionesFormComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
   private cotizacionService = inject(CotizacionesService);
   private confirmationService = inject(ConfirmationService);
   private clienteService = inject(ClienteService);
@@ -68,7 +70,6 @@ export class CotizacionesFormComponent implements OnInit {
 
   form = this.fb.group({
     clientes: [[], Validators.required],
-    usuario: [1, Validators.required],
   });
 
   formDetalle = this.fb.group({
@@ -211,7 +212,7 @@ export class CotizacionesFormComponent implements OnInit {
         this.loading = true;
         const payloadCotizacion = {
           idCliente: this.form.get('clientes')?.value,
-          isUsuario: this.form.get('usuario')?.value,
+          isUsuario: this.authService.getUsuarioDesdeToken()?.id || 0,
           cotizacionDetalle: this.cotizacionDetalle,
         };
 

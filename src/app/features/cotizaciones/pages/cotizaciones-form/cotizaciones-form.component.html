@@ -21,11 +21,6 @@
                     <p-select [options]="clientes" formControlName="clientes" optionLabel="nombre" optionValue="id"
                         placeholder="Selecciona" class="w-full md:w-56" emptyMessage="No se encontraron clientes" />
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label for="usuario">Usuario</label>
-                    <input id="usuario" pInputText formControlName="usuario" placeholder="Ingrese usuario"
-                        class="w-full" />
-                </div>
             </div>
 
             @if (!habilitarDetalle) {
