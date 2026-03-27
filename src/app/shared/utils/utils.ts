@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from "@angular/forms";
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export function formatearRut(rut: string): string {
   rut = rut.replace(/\./g, '').replace('-', '');
@@ -49,4 +49,15 @@ export function rutValidator(
     dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : dvEsperado.toString();
 
   return dv === dvFinal ? null : { rutInvalido: true };
+}
+
+export function passwordsMatchValidator(
+  control: AbstractControl,
+): ValidationErrors | null {
+  const password = control.get('password')?.value;
+  const repeat = control.get('repeatPassword')?.value;
+
+  if (!password || !repeat) return null;
+
+  return password === repeat ? null : { passwordsMismatch: true };
 }
