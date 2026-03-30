@@ -15,4 +15,11 @@ export const COTIZACIONES_ROUTES: Routes = [
         (m) => m.CotizacionesFormComponent,
       ),
   },
+  {
+    path: 'editar/:id',
+    loadComponent: () =>
+      import('./pages/cotizaciones-edit/cotizaciones-edit.component').then(
+        (m) => m.CotizacionesEditComponent,
+      ),
+  },
 ];

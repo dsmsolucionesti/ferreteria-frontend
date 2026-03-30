@@ -23,7 +23,6 @@ export class CotizacionesService {
   }
 
   post(data: any): Observable<RespuestaProceso<Cotizaciones>> {
-    console.log(data);
     return this.http.post<RespuestaProceso<Cotizaciones>>(
       `${this.url}/cotizaciones`,
       data,
@@ -32,7 +31,7 @@ export class CotizacionesService {
 
   patch(
     id: number,
-    data: Partial<Cotizaciones>,
+    data: Partial<any>,
   ): Observable<RespuestaProceso<Cotizaciones>> {
     return this.http.patch<RespuestaProceso<Cotizaciones>>(
       `${this.url}/cotizaciones/${id}`,
@@ -43,6 +42,16 @@ export class CotizacionesService {
   delete(id: number): Observable<RespuestaProceso<Cotizaciones>> {
     return this.http.delete<RespuestaProceso<Cotizaciones>>(
       `${this.url}/cotizaciones/${id}`,
+    );
+  }
+
+  updateEstado(
+    id: number,
+    data: any,
+  ): Observable<RespuestaProceso<Cotizaciones>> {
+    return this.http.patch<RespuestaProceso<Cotizaciones>>(
+      `${this.url}/cotizaciones/${id}/estado`,
+      data,
     );
   }
 }

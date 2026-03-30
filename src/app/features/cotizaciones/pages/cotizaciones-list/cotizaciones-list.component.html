@@ -36,7 +36,7 @@
                             [severity]="getSeverity(c.estadoCotizacion?.nombre)"></p-tag></td>
                     <td>
                         <div class="flex justify-content-center gap-3">
-                            <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top"></i>
+                            <i class="pi pi-pencil icon-edit" pTooltip="Editar" tooltipPosition="top" (click)="editarCotizacion(c.id)"></i>
                             <i class="pi pi-trash icon-trash" pTooltip="Eliminar" tooltipPosition="top"></i>
                         </div>
                     </td>

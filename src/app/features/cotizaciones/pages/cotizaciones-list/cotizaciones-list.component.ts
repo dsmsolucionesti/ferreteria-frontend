@@ -24,7 +24,6 @@ import { ClpPipe } from '../../../../shared/pipes/moneda.pipe';
 @Component({
   selector: 'app-cotizaciones-list',
   templateUrl: './cotizaciones-list.component.html',
-  styleUrls: ['./cotizaciones-list.component.scss'],
   imports: [
     Button,
     CardModule,
@@ -114,5 +113,9 @@ export class CotizacionesListComponent implements OnInit {
       default:
         return 'secondary';
     }
+  }
+
+  editarCotizacion(id: number) {
+    this.router.navigate(['/cotizaciones/editar', id]);
   }
 }
