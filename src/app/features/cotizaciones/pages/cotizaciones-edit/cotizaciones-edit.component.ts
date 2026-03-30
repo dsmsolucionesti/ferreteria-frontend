@@ -25,6 +25,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { EstadoCotizacion } from '../../cotizaciones.enum';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-cotizaciones-edit',
@@ -46,6 +47,7 @@ import { EstadoCotizacion } from '../../cotizaciones.enum';
     InputNumberModule,
     RouterLink,
     InputTextModule,
+    TagModule,
   ],
   providers: [ConfirmationService, MessageService, ClpPipe],
   standalone: true,
@@ -134,7 +136,7 @@ export class CotizacionesEditComponent implements OnInit {
       EstadoCotizacion.CANCELADA,
       EstadoCotizacion.ACEPTADA,
       EstadoCotizacion.RECHAZADA,
-      EstadoCotizacion.VENCIDA
+      EstadoCotizacion.VENCIDA,
     ];
     if (estadosBloqueados.includes(this.idEstadoCotizacion)) {
       this.form.disable();
@@ -374,5 +376,27 @@ export class CotizacionesEditComponent implements OnInit {
         });
       },
     });
+  }
+
+  getSeverityEstado() {
+    switch (this.idEstadoCotizacion) {
+      case EstadoCotizacion.ENVIADA:
+        return 'info';
+
+      case EstadoCotizacion.ACEPTADA:
+        return 'success';
+
+      case EstadoCotizacion.RECHAZADA:
+        return 'danger';
+
+      case EstadoCotizacion.CANCELADA:
+        return 'contrast';
+
+      case EstadoCotizacion.VENCIDA:
+        return 'warn';
+
+      default:
+        return 'secondary';
+    }
   }
 }

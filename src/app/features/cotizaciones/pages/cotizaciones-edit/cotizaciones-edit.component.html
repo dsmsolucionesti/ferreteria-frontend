@@ -15,12 +15,25 @@
     } @else {
     <div class="card p-4 float-container">
         <form [formGroup]="form" class="flex flex-column gap-4">
-            <div class="formgrid grid">
+            <div class="formgrid grid align-items-end">
                 <div class="field col-12 md:col-4">
                     <label for="clientes">Cliente</label>
                     <p-select [options]="clientes" formControlName="clientes" optionLabel="nombre" optionValue="id"
-                        placeholder="Selecciona" class="w-full md:w-56" emptyMessage="No se encontraron clientes" />
+                        placeholder="Selecciona" class="w-full" emptyMessage="No se encontraron clientes" />
                 </div>
+                <div class="field col-12 md:col-4">
+                    <label for="fecha">Fecha de cotización</label>
+                    <div class="p-inputtext w-full">
+                        {{ cotizacion.fecha | date:'dd/MM/yyyy' }}
+                    </div>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="estado">Estado</label>
+                    <div class="p-inputtext w-full">
+                        <p-tag [severity]="getSeverityEstado()" [value]="cotizacion.estado.nombre" [rounded]="true" />
+                    </div>
+                </div>
+
             </div>
 
             @if (!habilitarDetalle) {
@@ -37,7 +50,7 @@
             <h3>Detalle de la cotización</h3>
             <div class="card">
                 @if(!bloquearFormulario) {
-                    <form [formGroup]="formDetalle" class="flex flex-column gap-4">
+                <form [formGroup]="formDetalle" class="flex flex-column gap-4">
                     <div class="formgrid grid">
                         <div class="field col-12 md:col-3">
                             <label for="productos">Seleccionar productos</label>
@@ -140,7 +153,7 @@
                             (onClick)="actualizarEstado(EstadoCotizacion.RECHAZADA)" severity="danger">
                         </p-button>
                         }
-                        
+
                         @if(puedeCancelarCotizacion()) {
                         <p-button label="Cancelar cotización" icon="pi pi-times"
                             (onClick)="actualizarEstado(EstadoCotizacion.CANCELADA)" severity="contrast">
