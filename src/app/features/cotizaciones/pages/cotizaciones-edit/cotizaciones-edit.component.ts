@@ -73,6 +73,7 @@ export class CotizacionesEditComponent implements OnInit {
   habilitarDetalle: boolean = false;
   selectProducto: boolean = false;
   showTableProductos: boolean = false;
+  bloquearFormulario: boolean = false;
 
   total: number = 0;
   iva: number = 0.19;
@@ -106,6 +107,7 @@ export class CotizacionesEditComponent implements OnInit {
         this.idEstadoCotizacion = this.cotizacion.estado.id;
         this.cotizacionDetalle = [...(this.cotizacion?.detalles || [])];
         this.cargarCotizacion();
+        this.validarEstadosCotizacion();
       },
       error: () => {
         this.loading = false;
@@ -124,6 +126,21 @@ export class CotizacionesEditComponent implements OnInit {
     this.habilitarDetalle = true;
     this.showTableProductos = true;
     this.loading = false;
+  }
+
+  validarEstadosCotizacion(): void {
+    const estadosBloqueados = [
+      EstadoCotizacion.ENVIADA,
+      EstadoCotizacion.CANCELADA,
+      EstadoCotizacion.ACEPTADA,
+      EstadoCotizacion.RECHAZADA,
+      EstadoCotizacion.VENCIDA
+    ];
+    if (estadosBloqueados.includes(this.idEstadoCotizacion)) {
+      this.form.disable();
+      this.formDetalle.disable();
+      this.bloquearFormulario = true;
+    }
   }
 
   puedeActualizarCotizacion(): boolean {

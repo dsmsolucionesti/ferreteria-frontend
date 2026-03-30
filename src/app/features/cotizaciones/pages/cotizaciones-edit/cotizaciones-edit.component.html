@@ -36,7 +36,8 @@
         <div>
             <h3>Detalle de la cotización</h3>
             <div class="card">
-                <form [formGroup]="formDetalle" class="flex flex-column gap-4">
+                @if(!bloquearFormulario) {
+                    <form [formGroup]="formDetalle" class="flex flex-column gap-4">
                     <div class="formgrid grid">
                         <div class="field col-12 md:col-3">
                             <label for="productos">Seleccionar productos</label>
@@ -72,6 +73,7 @@
 
                     </div>
                 </form>
+                }
 
                 @if (showTableProductos) {
                 <p-table [value]="cotizacionDetalle" showGridlines selectionMode="single" [paginator]="true" [rows]="10"
@@ -136,6 +138,12 @@
                         @if(puedeRechazarCotizacion()) {
                         <p-button label="Rechazar cotización" icon="pi pi-times"
                             (onClick)="actualizarEstado(EstadoCotizacion.RECHAZADA)" severity="danger">
+                        </p-button>
+                        }
+                        
+                        @if(puedeCancelarCotizacion()) {
+                        <p-button label="Cancelar cotización" icon="pi pi-times"
+                            (onClick)="actualizarEstado(EstadoCotizacion.CANCELADA)" severity="contrast">
                         </p-button>
                         }
                     </div>
