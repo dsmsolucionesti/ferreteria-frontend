@@ -24,6 +24,7 @@ import { ClpPipe } from '../../../../shared/pipes/moneda.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-cotizaciones-form',
@@ -45,6 +46,7 @@ import { AuthService } from '../../../../core/services/auth.service';
     ClpPipe,
     InputNumberModule,
     RouterLink,
+    AutoCompleteModule,
   ],
   providers: [ConfirmationService, MessageService, ClpPipe],
   standalone: true,
@@ -60,16 +62,23 @@ export class CotizacionesFormComponent implements OnInit {
   private router = inject(Router);
 
   clientes: Cliente[] = [];
+  clientesFiltrados: any[] = [];
+
   productos: Producto[] = [];
   cotizacionDetalle: DetalleCotizacion[] = [];
   loading: boolean = false;
+  loadingClientes: boolean = false;
   shorFormulario: boolean = false;
   habilitarDetalle: boolean = false;
   selectProducto: boolean = false;
   showTableProductos: boolean = false;
 
+  total: number = 0;
+  iva: number = 0.19;
+  totalConIva: number = 0;
+
   form = this.fb.group({
-    clientes: [[], Validators.required],
+    clientes: [null, Validators.required],
   });
 
   formDetalle = this.fb.group({
@@ -80,17 +89,17 @@ export class CotizacionesFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loading = true;
-    this.clienteService.findAll().subscribe({
-      next: (response) => {
-        this.clientes = response.datos || [];
-        this.loading = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.loading = false;
-      },
-    });
+    // this.loading = true;
+    // this.clienteService.findAll().subscribe({
+    //   next: (response) => {
+    //     this.clientes = response.datos || [];
+    //     this.loading = false;
+    //   },
+    //   error: (error) => {
+    //     console.log(error);
+    //     this.loading = false;
+    //   },
+    // });
   }
 
   siguiente() {
@@ -181,6 +190,9 @@ export class CotizacionesFormComponent implements OnInit {
 
       this.cotizacionDetalle.push(detalle);
     }
+
+    this.calcularTotales();
+
     this.selectProducto = false;
     this.formDetalle.reset({
       productos: null,
@@ -190,6 +202,37 @@ export class CotizacionesFormComponent implements OnInit {
     });
 
     this.showTableProductos = true;
+  }
+
+  calcularTotales() {
+    this.total = this.cotizacionDetalle.reduce(
+      (acc, item) => acc + item.subtotal,
+      0,
+    );
+    this.iva = this.total * 0.19;
+    this.totalConIva = this.total + this.iva;
+  }
+
+  buscarClientes(event: any) {
+    const query = event.query;
+
+    if (!query || query.length < 3) {
+      this.clientesFiltrados = [];
+      return;
+    }
+
+    this.loadingClientes = true;
+
+    this.clienteService.searchClientes(query).subscribe({
+      next: (resp) => {
+        this.clientesFiltrados = resp.datos || [];
+        this.loadingClientes = false;
+      },
+      error: () => {
+        this.clientesFiltrados = [];
+        this.loadingClientes = false;
+      },
+    });
   }
 
   enviarCotizacion() {
@@ -210,9 +253,11 @@ export class CotizacionesFormComponent implements OnInit {
 
       accept: () => {
         this.loading = true;
+        const cliente: any = this.form.value.clientes;
+
         const payloadCotizacion = {
-          idCliente: this.form.get('clientes')?.value,
-          isUsuario: this.authService.getUsuarioDesdeToken()?.id || 0,
+          idCliente: cliente.id,
+          idUsuario: this.authService.getUsuarioDesdeToken()?.id || 0,
           cotizacionDetalle: this.cotizacionDetalle,
         };
 

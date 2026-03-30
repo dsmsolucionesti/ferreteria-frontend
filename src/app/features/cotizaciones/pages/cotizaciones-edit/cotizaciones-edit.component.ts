@@ -74,8 +74,12 @@ export class CotizacionesEditComponent implements OnInit {
   selectProducto: boolean = false;
   showTableProductos: boolean = false;
 
+  total: number = 0;
+  iva: number = 0.19;
+  totalConIva: number = 0;
+
   form = this.fb.group({
-    clientes: [[], Validators.required],
+    clientes: [{ value: [], disabled: true }, Validators.required],
     usuario: [{ value: '', disabled: true }, [Validators.required]],
   });
 
@@ -115,6 +119,8 @@ export class CotizacionesEditComponent implements OnInit {
       usuario: this.cotizacion.usuario?.nombre,
     });
 
+    this.calcularTotales();
+
     this.habilitarDetalle = true;
     this.showTableProductos = true;
     this.loading = false;
@@ -139,27 +145,6 @@ export class CotizacionesEditComponent implements OnInit {
   puedeRechazarCotizacion(): boolean {
     return this.idEstadoCotizacion === EstadoCotizacion.ENVIADA;
   }
-
-  // siguiente() {
-  //   if (this.form.invalid) {
-  //     this.form.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   this.loading = true;
-
-  //   this.productoService.findAll().subscribe({
-  //     next: (res) => {
-  //       this.productos = res.datos || [];
-  //       this.loading = false;
-  //       this.habilitarDetalle = true;
-  //     },
-  //     error: (error) => {
-  //       console.log(error);
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
 
   onProductoChange(event: any) {
     this.formDetalle.patchValue({
@@ -209,24 +194,6 @@ export class CotizacionesEditComponent implements OnInit {
     );
 
     if (index !== -1) {
-      console.log(
-        'this.cotizacionDetalle[index].cantidad',
-        this.cotizacionDetalle[index].cantidad,
-      );
-      console.log('cantidad', cantidad);
-      console.log(
-        'this.cotizacionDetalle[index].subtotal',
-        this.cotizacionDetalle[index].subtotal,
-      );
-      console.log(
-        'his.cotizacionDetalle[index].cantidad',
-        this.cotizacionDetalle[index].cantidad,
-      );
-      console.log(
-        'this.cotizacionDetalle[index].precioUnitario',
-        this.cotizacionDetalle[index],
-      );
-
       this.cotizacionDetalle[index].cantidad += cantidad;
 
       this.cotizacionDetalle[index].subtotal =
@@ -251,7 +218,19 @@ export class CotizacionesEditComponent implements OnInit {
       subtotal: 0,
     });
 
+    this.calcularTotales();
+
     this.showTableProductos = true;
+  }
+
+  calcularTotales() {
+    this.total = this.cotizacionDetalle.reduce(
+      (acc, item) => acc + item.subtotal,
+      0,
+    );
+    this.iva = Number(this.total) * 0.19;
+
+    this.totalConIva = Number(this.total) + this.iva;
   }
 
   actualizarCotizacion() {
@@ -274,7 +253,7 @@ export class CotizacionesEditComponent implements OnInit {
         this.loading = true;
         const payloadCotizacion = {
           idCliente: this.form.get('clientes')?.value,
-          isUsuario: this.authService.getUsuarioDesdeToken()?.id || 0,
+          idUsuario: this.authService.getUsuarioDesdeToken()?.id || 0,
           cotizacionDetalle: this.cotizacionDetalle,
         };
 

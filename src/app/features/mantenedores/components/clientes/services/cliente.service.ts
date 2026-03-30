@@ -11,14 +11,21 @@ export class ClienteService {
   private http = inject(HttpClient);
 
   findAll(): Observable<RespuestaProceso<Cliente>> {
-    return this.http.get<RespuestaProceso<Cliente>>(
-      `${this.url}/clientes`,
-    );
+    return this.http.get<RespuestaProceso<Cliente>>(`${this.url}/clientes`);
   }
 
   findById(id: number): Observable<RespuestaProceso<Cliente>> {
     return this.http.get<RespuestaProceso<Cliente>>(
       `${this.url}/clientes/${id}`,
+    );
+  }
+
+  searchClientes(query: string): Observable<RespuestaProceso<Cliente[]>> {
+    return this.http.get<RespuestaProceso<Cliente[]>>(
+      `${this.url}/clientes/buscar/texto`,
+      {
+        params: { query },
+      },
     );
   }
 
