@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
-  loading = false;
+  loading = signal(false);
 
   ngOnInit(): void {
     if (this.authService.estaLogueado()) {
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.loading.set(true);
     const payload = {
       email: this.form.value.email,
       password: this.form.value.password,
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit {
         });
       },
       complete: () => {
-        this.loading = false;
+        this.loading.set(false);
       },
     });
   }
