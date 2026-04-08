@@ -25,6 +25,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CategoriaService } from '../../components/categorias/services/categoria.service';
 
 @Component({
   selector: 'app-cotizaciones-form',
@@ -53,23 +54,36 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 })
 export class CotizacionesFormComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private cotizacionService = inject(CotizacionesService);
-  private confirmationService = inject(ConfirmationService);
-  private clienteService = inject(ClienteService);
-  private productoService = inject(ProductoService);
-  private messageService = inject(MessageService);
   private router = inject(Router);
 
+  private authService = inject(AuthService);
+
+  private cotizacionService = inject(CotizacionesService);
+  private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
+
+  private clienteService = inject(ClienteService);
+  private categoriaService = inject(CategoriaService);
+  private productoService = inject(ProductoService);
+
   clientes: Cliente[] = [];
+
   clientesFiltrados: any[] = [];
+  categoriasFiltradas: any[] = [];
 
   productos: Producto[] = [];
+  productosFiltrados: any[] = [];
+
   cotizacionDetalle: DetalleCotizacion[] = [];
+
   loading: boolean = false;
   loadingClientes: boolean = false;
   shorFormulario: boolean = false;
   habilitarDetalle: boolean = false;
+
+  showCategorias: boolean = false;
+  showProductos: boolean = false;
+
   selectProducto: boolean = false;
   showTableProductos: boolean = false;
 
@@ -82,24 +96,35 @@ export class CotizacionesFormComponent implements OnInit {
   });
 
   formDetalle = this.fb.group({
-    productos: [[], Validators.required],
+    productos: [this.fb.control<Producto | null>(null), Validators.required],
+    categoria: [null, Validators.required],
     cantidad: [null, [Validators.required, Validators.min(1)]],
     valorUnitario: [{ value: 0, disabled: true }, Validators.required],
     subtotal: [{ value: 0, disabled: true }, Validators.required],
   });
 
-  ngOnInit(): void {
-    // this.loading = true;
-    // this.clienteService.findAll().subscribe({
-    //   next: (response) => {
-    //     this.clientes = response.datos || [];
-    //     this.loading = false;
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //     this.loading = false;
-    //   },
-    // });
+  ngOnInit(): void {}
+
+  buscarClientes(event: any) {
+    const query = event.query;
+
+    if (!query || query.length < 3) {
+      this.clientesFiltrados = [];
+      return;
+    }
+
+    this.loadingClientes = true;
+
+    this.clienteService.searchClientes(query).subscribe({
+      next: (resp) => {
+        this.clientesFiltrados = resp.datos || [];
+        this.loadingClientes = false;
+      },
+      error: () => {
+        this.clientesFiltrados = [];
+        this.loadingClientes = false;
+      },
+    });
   }
 
   siguiente() {
@@ -108,39 +133,67 @@ export class CotizacionesFormComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.habilitarDetalle = true;
+  }
 
-    this.productoService.findAll().subscribe({
-      next: (res) => {
-        this.productos = res.datos || [];
-        this.loading = false;
-        this.habilitarDetalle = true;
-      },
-      error: (error) => {
-        console.log(error);
-        this.loading = false;
-      },
+  buscarCategorias(event: any) {
+    const query = event.query;
+
+    if (!query || query.length < 3) return;
+
+    this.categoriaService.searchCategorias(query).subscribe((resp) => {
+      this.categoriasFiltradas = resp.datos || [];
+    });
+  }
+
+  onCategoriaChange(event: any) {
+    if (event) {
+      this.formDetalle.patchValue({
+        categoria: event.value,
+      });
+
+      this.showProductos = true;
+    }
+  }
+
+  buscarProductos(event: any) {
+    const query = event.query;
+
+    if (!query || query.length < 3) return;
+
+    this.productoService.searchProductos(query).subscribe((resp) => {
+      this.productosFiltrados = resp.datos || [];
     });
   }
 
   onProductoChange(event: any) {
-    this.formDetalle.patchValue({
-      productos: null,
-      cantidad: null,
-      valorUnitario: 0,
-      subtotal: 0,
-    });
+    console.log('onProductoChange');
+    if (event) {
+      console.log(event);
+      this.formDetalle.patchValue({
+        productos: event.value,
+        cantidad: null,
+        valorUnitario: 0,
+        subtotal: 0,
+      });
 
-    this.productos.map((producto) => {
-      if (producto.id === event.value) {
-        this.formDetalle.patchValue({
-          productos: event.value,
-          valorUnitario: producto.precio,
-        });
-      }
-    });
+      this.showTableProductos = true;
+      this.agregarProductos();
+      console.log('se selecciona producto y se habilita tabla');
+    }
 
-    this.selectProducto = true;
+    // this.productosFiltrados.map((producto) => {
+    //   if (producto.id === event.value) {
+    //     this.formDetalle.patchValue({
+    //       productos: event.value,
+    //       valorUnitario: producto.precio,
+    //     });
+
+    //     console.log('se carga formulario');
+    //   }
+    // });
+
+    // this.selectProducto = true;
   }
 
   onCantidadChange(event: any) {
@@ -154,12 +207,18 @@ export class CotizacionesFormComponent implements OnInit {
   }
 
   agregarProductos() {
-    if (this.formDetalle.invalid) {
-      this.formDetalle.markAllAsTouched();
-      return;
-    }
+    // if (this.formDetalle.invalid) {
+    //   this.formDetalle.markAllAsTouched();
+    //   return;
+    // }
+
+    console.clear();
+    const product = this.formDetalle.get('productos')?.value;
+    console.log(product);
+    console.log(product?.id);
 
     const productoId = Number(this.formDetalle.get('productos')?.value);
+
     const producto = this.productos.find((p) => p.id === productoId);
     const nombre = producto?.nombre;
 
@@ -211,28 +270,6 @@ export class CotizacionesFormComponent implements OnInit {
     );
     this.iva = this.total * 0.19;
     this.totalConIva = this.total + this.iva;
-  }
-
-  buscarClientes(event: any) {
-    const query = event.query;
-
-    if (!query || query.length < 3) {
-      this.clientesFiltrados = [];
-      return;
-    }
-
-    this.loadingClientes = true;
-
-    this.clienteService.searchClientes(query).subscribe({
-      next: (resp) => {
-        this.clientesFiltrados = resp.datos || [];
-        this.loadingClientes = false;
-      },
-      error: () => {
-        this.clientesFiltrados = [];
-        this.loadingClientes = false;
-      },
-    });
   }
 
   enviarCotizacion() {

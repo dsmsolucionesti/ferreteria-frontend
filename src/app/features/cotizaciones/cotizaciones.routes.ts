@@ -7,6 +7,7 @@ export const COTIZACIONES_ROUTES: Routes = [
       import('./pages/cotizaciones-list/cotizaciones-list.component').then(
         (m) => m.CotizacionesListComponent,
       ),
+    data: { breadcrumb: { label: 'Cotizaciones' } },
   },
   {
     path: 'nuevo',
@@ -14,6 +15,7 @@ export const COTIZACIONES_ROUTES: Routes = [
       import('./pages/cotizaciones-form/cotizaciones-form.component').then(
         (m) => m.CotizacionesFormComponent,
       ),
+    data: { breadcrumb: { label: 'Nueva cotización' } },
   },
   {
     path: 'editar/:id',
@@ -21,5 +23,6 @@ export const COTIZACIONES_ROUTES: Routes = [
       import('./pages/cotizaciones-edit/cotizaciones-edit.component').then(
         (m) => m.CotizacionesEditComponent,
       ),
+    data: { breadcrumb: { label: 'Editar cotización' } },
   },
 ];

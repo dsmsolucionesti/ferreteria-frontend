@@ -26,18 +26,22 @@ export const routes: Routes = [
       {
         path: 'cotizaciones',
         children: COTIZACIONES_ROUTES,
+        data: { breadcrumb: { label: 'Cotizaciones' } },
       },
       {
         path: 'categorias',
         children: CATEGORIA_ROUTES,
+        data: { breadcrumb: { label: 'Categorías' } },
       },
       {
         path: 'productos',
         children: PRODUCTO_ROUTES,
+        data: { breadcrumb: { label: 'Productos' } },
       },
       {
         path: 'mantenedores',
         children: MANTENEDORES_ROUTES,
+        data: { breadcrumb: { label: 'Matenedores' } },
       },
     ],
   },

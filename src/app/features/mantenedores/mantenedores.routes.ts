@@ -14,6 +14,9 @@ export const MANTENEDORES_ROUTES: Routes = [
       import('./components/clientes/pages/clientes.component').then(
         (m) => m.ClientesComponent,
       ),
+    data: {
+      breadcrumb: { label: 'Clientes' },
+    },
   },
   {
     path: 'usuarios',
@@ -21,5 +24,8 @@ export const MANTENEDORES_ROUTES: Routes = [
       import('./components/usuarios/pages/usuarios.component').then(
         (m) => m.UsuariosComponent,
       ),
+    data: {
+      breadcrumb: { label: 'Usuarios' },
+    },
   },
 ];

@@ -52,12 +52,23 @@
             <div class="card">
                 <form [formGroup]="formDetalle" class="flex flex-column gap-4">
                     <div class="formgrid grid">
+
+                        <div class="field col-12 md:col-3">
+                            <label for="productos">Categorías</label>
+                            <p-autoComplete formControlName="categoria" [suggestions]="categoriasFiltradas"
+                                (completeMethod)="buscarCategorias($event)" [optionLabel]="'nombre'"
+                                placeholder="Buscar categoría" (onSelect)="onCategoriaChange($event)" />
+                        </div>
+
+                        @if(categoriasFiltradas.length > 0 && showProductos) {
                         <div class="field col-12 md:col-3">
                             <label for="productos">Productos</label>
-                            <p-select [options]="productos" formControlName="productos" optionLabel="nombre"
-                                optionValue="id" placeholder="Selecciona" class="w-full md:w-56"
-                                (onChange)="onProductoChange($event)" emptyMessage="No se encontraron productos" />
+                            <p-autoComplete formControlName="productos" [suggestions]="productosFiltrados"
+                                (completeMethod)="buscarProductos($event)" [optionLabel]="'nombre'"
+                                placeholder="Buscar producto" (onSelect)="onProductoChange($event)" />
                         </div>
+                        }
+
                         @if(selectProducto) {
                         <div class="field col-12 md:col-3">
                             <label for="productos">Cantidad</label>

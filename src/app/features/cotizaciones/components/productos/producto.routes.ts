@@ -7,5 +7,6 @@ export const PRODUCTO_ROUTES: Routes = [
       import('./pages/producto-list/producto-list.component').then(
         (m) => m.ProductoListComponent,
       ),
+    data: { breadcrumb: { label: 'Productos' } },
   },
 ];

@@ -1,6 +1,6 @@
 <div class="flex h-screen overflow-hidden">
 
-    <div class="w-18rem p-3 bg-gray-300 text-white menu flex flex-column justify-content-between">
+    <div class="w-18rem p-3 bg-gray-300 menu flex flex-column justify-content-between">
         <div>
             <div class="flex flex-column mb-3">
                 <div class="flex justify-content-center">
@@ -17,12 +17,13 @@
             <span class="text-sm">
                 Bienvenido(a), {{ usuario.nombre }}
             </span>
-            <p-button label="Cerrar sesión" icon="pi pi-sign-out" severity="danger" class="w-full"
+            <p-button label="Cerrar sesión" icon="pi pi-sign-out" severity="danger" class="w-full" size="small"
                 (onClick)="logout()"></p-button>
         </div>
     </div>
 
     <div class="flex-1 p-4 bg-gray-200 content">
+        <p-breadcrumb [model]="breadcrumbItems" [home]="home" class="custom-breadcrumb"></p-breadcrumb>
         <router-outlet></router-outlet>
     </div>
 </div>
