@@ -4,7 +4,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { ProgressSpinner } from 'primeng/progressspinner';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 
@@ -18,7 +17,6 @@ import { InputTextModule } from 'primeng/inputtext';
     DividerModule,
     InputTextModule,
     Button,
-    ProgressSpinner,
     ConfirmDialogModule,
     ToastModule,
     ReactiveFormsModule,

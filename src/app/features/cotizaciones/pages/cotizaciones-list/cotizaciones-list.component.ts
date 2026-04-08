@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { Button } from 'primeng/button';
@@ -59,7 +59,7 @@ export class CotizacionesListComponent implements OnInit {
   });
 
   mensaje: string = '';
-  loading: boolean = false;
+  loading = signal(false);
   loadingMessage: string = '';
   shorFormulario: boolean = false;
   showForm: boolean = false;
@@ -79,21 +79,22 @@ export class CotizacionesListComponent implements OnInit {
   }
 
   cargarCotizaciones() {
-    this.loading = true;
+    this.cotizaciones = [];
+    this.loading.set(true);
     this.cotizacionService.findAll().subscribe({
       next: (res) => {
         if (res.idEstado === 0) {
           this.cotizaciones = res.datos || [];
-          this.loading = false;
+          this.loading.set(false);
         }
 
         if (res.idEstado === 1) {
-          this.loading = false;
+          this.loading.set(false);
         }
       },
       error: (err) => {
         console.error('Error al cargar cotizaciones:', err);
-        this.loading = false;
+        this.loading.set(false);
       },
     });
   }
@@ -117,5 +118,63 @@ export class CotizacionesListComponent implements OnInit {
 
   editarCotizacion(id: number) {
     this.router.navigate(['/cotizaciones/editar', id]);
+  }
+
+  eliminarCotizacion(id: number) {
+    this.confirmationService.confirm({
+      message: '¿Desea eliminar esta cotización?',
+      header: 'Atención',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancelar',
+      rejectButtonProps: {
+        label: 'Cancelar',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Aceptar',
+        severity: 'success',
+      },
+
+      accept: () => {
+        this.loading.set(true);
+
+        this.cotizacionService.delete(id).subscribe({
+          next: (res: any) => {
+            if (res.idEstado === 0) {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Confirmado',
+                detail: 'Registro eliminado correctamente',
+              });
+              this.cargarCotizaciones();
+            } else {
+              this.loading.set(false);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al eliminar la cotización 1',
+              });
+            }
+          },
+          error: (err) => {
+            this.loading.set(false);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Error: ' + err.error.message,
+            });
+          },
+        });
+      },
+      reject: () => {
+        this.loading.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Cancelado',
+          detail: 'Operación cancelada',
+        });
+      },
+    });
   }
 }
