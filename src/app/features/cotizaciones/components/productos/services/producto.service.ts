@@ -28,6 +28,15 @@ export class ProductoService {
     );
   }
 
+  searchProductos(query: string): Observable<RespuestaProceso<Producto[]>> {
+    return this.http.get<RespuestaProceso<Producto[]>>(
+      `${this.url}/producto/buscar/texto`,
+      {
+        params: { query },
+      },
+    );
+  }
+
   patch(
     id: number,
     data: Partial<Producto>,

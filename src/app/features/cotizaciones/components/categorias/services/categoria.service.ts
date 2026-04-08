@@ -20,6 +20,15 @@ export class CategoriaService {
     );
   }
 
+  searchCategorias(query: string): Observable<RespuestaProceso<Categoria[]>> {
+    return this.http.get<RespuestaProceso<Categoria[]>>(
+      `${this.url}/categorias/buscar/texto`,
+      {
+        params: { query },
+      },
+    );
+  }
+
   post(data: Partial<Categoria>): Observable<RespuestaProceso<Categoria>> {
     return this.http.post<RespuestaProceso<Categoria>>(
       `${this.url}/categorias`,
